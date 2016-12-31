@@ -1,21 +1,18 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
 import java.awt.Font;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class EditPartFrame extends JFrame {
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+public class EditPartFrame extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -23,6 +20,8 @@ public class EditPartFrame extends JFrame {
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField textField_4;
+	private JButton btnSubmit;
+	private JButton btnDeletePart; 
 
 	/**
 	 * Launch the application.
@@ -104,12 +103,9 @@ public class EditPartFrame extends JFrame {
 		textField_3.setBounds(214, 473, 86, 20);
 		textField_3.setColumns(10);
 		
-		JButton btnSubmit = new JButton("Save Changes");
-		btnSubmit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnSubmit.setBounds(77, 558, 101, 23);
+		btnSubmit = new JButton("Save Changes");
+		btnSubmit.addActionListener(this);		
+		btnSubmit.setBounds(77, 558, 118, 23);
 		
 		textField_4 = new JTextField();
 		textField_4.setBounds(214, 422, 86, 20);
@@ -132,8 +128,24 @@ public class EditPartFrame extends JFrame {
 		contentPane.add(textField);
 		contentPane.add(comboBox);
 		
-		JButton btnDeletePart = new JButton("Delete Part");
-		btnDeletePart.setBounds(230, 558, 89, 23);
+		btnDeletePart = new JButton("Delete Part");
+		btnDeletePart.setBounds(230, 558, 118, 23);
+		btnDeletePart.addActionListener(this);
 		contentPane.add(btnDeletePart);
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+		JButton buttonPressed = (JButton) e.getSource();
+		if(buttonPressed.equals(btnSubmit)){
+			System.out.println("You have saved your changes");
+
+		}else if(buttonPressed.equals(btnDeletePart)){
+			System.out.println("Part deleted");
+		}
+		
+	}
 }
+

@@ -1,18 +1,20 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JLabel;
-import java.awt.Font;
 
-public class MainMenuFrame extends JFrame {
+public class MainMenuFrame extends JFrame implements ActionListener {
 
+	private JButton btnSearchPart;
+	private JButton btnNewButton;
+	
 	private JPanel contentPane;
 
 	/**
@@ -42,28 +44,39 @@ public class MainMenuFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnNewButton = new JButton("Add Part");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		btnNewButton.setBounds(524, 236, 233, 38);
+		btnNewButton = new JButton("Add Part");
+		btnNewButton.addActionListener(this);
+		btnNewButton.setBounds(524, 267, 233, 38);
 		contentPane.add(btnNewButton);
-		
-		JButton btnEditPart = new JButton("Edit Part");
-		btnEditPart.setBounds(524, 295, 233, 38);
-		contentPane.add(btnEditPart);
 		
 		JLabel lblInventory = new JLabel("Inventory");
 		lblInventory.setFont(new Font("Tahoma", Font.PLAIN, 60));
 		lblInventory.setBounds(84, 255, 264, 121);
 		contentPane.add(lblInventory);
 		
-		JButton btnSearchPart = new JButton("Search Part");
-		btnSearchPart.setBounds(524, 358, 233, 38);
+		btnSearchPart = new JButton("Search Part");
+		btnSearchPart.setBounds(524, 316, 233, 38);
+		btnSearchPart.addActionListener(this);
 		contentPane.add(btnSearchPart);
 		
 		contentPane.setBackground(new Color(127, 140, 141));
 	}
 
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		// when the add part button is pressed do this action
+		
+		JButton buttonPressed = (JButton) e.getSource();
+		
+		if (buttonPressed.equals(btnSearchPart)){
+			System.out.println("Search for a Part");
+		}else if(buttonPressed.equals(btnNewButton)){
+			System.out.println("Add a Part");
+			Inventory.mainmenuframe.setVisible(false);
+			Inventory.addpartframe.setVisible(true);
+		}
+		
+		
+	}
 }
