@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -28,14 +30,19 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class AddPartFrame extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
-	public static  JTextField textField;
-	public static  JTextField textField_1;
-	public static  JTextField textField_2;
-	public static  JTextField textField_3;
-	public static  JTextField textField_4;
-	public static  JTextField textField_5;
-	public static JComboBox comboBox;
+	public static JTextField textfield_partname;
+	public static JTextField textField_manufacturer;
+	public static JTextField textField_idnumber;
+	public static JTextField textField_quantity;
+	public static JTextField textField_binroom;
+	public static JTextField textField_binid;
+	public static JComboBox comboBox_room;
 
+	FileInputStream fIP;
+	XSSFSheet spreadsheet;
+	Cell cell;
+	// Create row object
+			XSSFRow row;
 	/**
 	 * Launch the application.
 	 */
@@ -91,39 +98,39 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		lblQuantity.setBounds(77, 473, 58, 17);
 		lblQuantity.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
-		textField = new JTextField();
-		textField.setBounds(214, 201, 105, 20);
-		textField.setColumns(10);
+		textfield_partname = new JTextField();
+		textfield_partname.setBounds(214, 201, 105, 20);
+		textfield_partname.setColumns(10);
 
-		textField_1 = new JTextField();
-		textField_1.setBounds(214, 260, 105, 20);
-		textField_1.setColumns(10);
+		textField_manufacturer = new JTextField();
+		textField_manufacturer.setBounds(214, 260, 105, 20);
+		textField_manufacturer.setColumns(10);
 
-		textField_2 = new JTextField();
-		textField_2.setBounds(214, 320, 105, 20);
-		textField_2.setColumns(10);
+		textField_idnumber = new JTextField();
+		textField_idnumber.setBounds(214, 320, 105, 20);
+		textField_idnumber.setColumns(10);
 
-		comboBox = new JComboBox();
-		comboBox.setBounds(214, 373, 105, 20);
+		comboBox_room = new JComboBox();
+		comboBox_room.setBounds(214, 373, 105, 20);
 
-		comboBox.addItem("Mezzanine");
-		comboBox.addItem("Electrical Room");
-		comboBox.addItem("PLC Room");
-		comboBox.addItem("Mezzanine Room");
-		comboBox.addItem("Plant");
+		comboBox_room.addItem("Mezzanine");
+		comboBox_room.addItem("Electrical Room");
+		comboBox_room.addItem("PLC Room");
+		comboBox_room.addItem("Mezzanine Room");
+		comboBox_room.addItem("Plant");
 
-		textField_3 = new JTextField();
-		textField_3.setBounds(214, 473, 105, 20);
-		textField_3.setColumns(10);
+		textField_quantity = new JTextField();
+		textField_quantity.setBounds(214, 473, 105, 20);
+		textField_quantity.setColumns(10);
 
 		JButton btnSubmit = new JButton("Submit");
 		btnSubmit.setBounds(132, 558, 65, 23);
 
 		btnSubmit.addActionListener(this);
 
-		textField_4 = new JTextField();
-		textField_4.setBounds(214, 422, 42, 20);
-		textField_4.setColumns(10);
+		textField_binroom = new JTextField();
+		textField_binroom.setBounds(214, 422, 42, 20);
+		textField_binroom.setColumns(10);
 		contentPane.setBackground(new Color(236, 240, 241));
 		contentPane.setForeground(new Color(52, 152, 219));
 		contentPane.setLayout(null);
@@ -135,87 +142,61 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		contentPane.add(lblRoom);
 		contentPane.add(lblBin);
 		contentPane.add(lblQuantity);
-		contentPane.add(textField_4);
-		contentPane.add(textField_3);
-		contentPane.add(textField_2);
-		contentPane.add(textField_1);
-		contentPane.add(textField);
-		contentPane.add(comboBox);
+		contentPane.add(textField_binroom);
+		contentPane.add(textField_quantity);
+		contentPane.add(textField_idnumber);
+		contentPane.add(textField_manufacturer);
+		contentPane.add(textfield_partname);
+		contentPane.add(comboBox_room);
 
 		JLabel label = new JLabel("-");
 		label.setBounds(266, 425, 14, 14);
 		contentPane.add(label);
 
-		textField_5 = new JTextField();
-		textField_5.setBounds(276, 422, 42, 20);
-		contentPane.add(textField_5);
-		textField_5.setColumns(10);
+		textField_binid = new JTextField();
+		textField_binid.setBounds(276, 422, 42, 20);
+		contentPane.add(textField_binid);
+		textField_binid.setColumns(10);
 	}
 
-	public void writeExcel() throws Exception {
-
-		// //Create Blank workbook
-		// XSSFWorkbook workbook = new XSSFWorkbook();
-		// //Create file system using specific name
-		// FileOutputStream out = new FileOutputStream(new
-		// File("database.xlsx"));
-		// //write operation workbook using file out object
-		// workbook.write(out);
-		// out.close();
-		// System.out.println("createworkbook.xlsx written successfully");
-
-		File file = new File("database.xlsx");
-		FileInputStream fIP = new FileInputStream("database.xlsx");
-		// Get the workbook instance for XLSX file
-		XSSFWorkbook workbook = new XSSFWorkbook(fIP);
-		if (file.isFile() && file.exists()) {
-			System.out.println("openworkbook.xlsx file open successfully.");
-		} else {
-			System.out.println("Error to open openworkbook.xlsx file.");
+	public void readExcel() throws IOException{
+		
+		Iterator<Row> rowIterator = spreadsheet.iterator();
+		while (rowIterator.hasNext()) {
+			row = (XSSFRow) rowIterator.next();
+			Iterator<Cell> cellIterator = row.cellIterator();
+			while (cellIterator.hasNext()) {
+				cell = cellIterator.next();
+				switch (cell.getCellType()) {
+				case Cell.CELL_TYPE_NUMERIC:
+					System.out.print(cell.getNumericCellValue() + " \t\t ");
+					break;
+				case Cell.CELL_TYPE_STRING:
+					System.out.print(cell.getStringCellValue() + " \t\t ");
+					break;
+				}
+			}
+			System.out.println();
 		}
+		//fIP.close();
 
-		// Create row object
-				XSSFRow row;
-		
-		// Create a blank sheet
-		//XSSFSheet spreadsheet = workbook.createSheet("Employee Info");
-		XSSFSheet spreadsheet = workbook.getSheet("Employee Info");
-		
-		Iterator < Row > rowIterator = spreadsheet.iterator();
-	      while (rowIterator.hasNext()) 
-	      {
-	         row = (XSSFRow) rowIterator.next();
-	         Iterator < Cell > cellIterator = row.cellIterator();
-	         while ( cellIterator.hasNext()) 
-	         {
-	            Cell cell = cellIterator.next();
-	            switch (cell.getCellType()) 
-	            {
-	               case Cell.CELL_TYPE_NUMERIC:
-	               System.out.print( 
-	               cell.getNumericCellValue() + " \t\t " );
-	               break;
-	               case Cell.CELL_TYPE_STRING:
-	               System.out.print(
-	               cell.getStringCellValue() + " \t\t " );
-	               break;
-	            }
-	         }
-	         System.out.println();
-	      }
-	      fIP.close();
-		
-		
+	}
+	
+	public void setupExcel(){
 		
 		// This data needs to be written (Object[])
+		
 		Map<String, Object[]> empinfo = new TreeMap<String, Object[]>();
-		empinfo.put("1", new Object[] { "PART NAME", "MANUFACTURER", "ID NUMBER", "ROOM","BIN", "Quantity" });
+		
+		empinfo.put("1", new Object[] { "PART NAME", "MANUFACTURER", "ID NUMBER", "ROOM", "BIN", "Quantity" });
 		empinfo.put("2", new Object[] { "tp01", "Gopal", "Technical Manager" });
 		empinfo.put("3", new Object[] { "tp02", "", "Proof Reader" });
 		empinfo.put("4", new Object[] { "tp03", "Masthan", "Technical Writer" });
-		empinfo.put("5", new Object[] { "tp04", "sdfgsdgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgf", "Technical Writer" });
+		empinfo.put("5", new Object[] { "tp04", "sdfggfgfgf", "Technical Writer" });
 		empinfo.put("6", new Object[] { "tp05", "Krishna", "Technical Writer" });
+		
 		// Iterate over data and write to sheet
+		
 		Set<String> keyid = empinfo.keySet();
 		int rowid = 0;
 		for (String key : keyid) {
@@ -227,12 +208,56 @@ public class AddPartFrame extends JFrame implements ActionListener {
 				cell.setCellValue((String) obj);
 			}
 		}
+	
+	}
+	
+	public void writeExcel() throws Exception {
+
+
+		File file = new File("database.xlsx");
+		FileInputStream fIP = new FileInputStream("database.xlsx");
+		
+		// Get the workbook instance for XLSX file
+		
+		XSSFWorkbook workbook = new XSSFWorkbook(fIP);
+		
+		if (file.isFile() && file.exists()) {
+			System.out.println("openworkbook.xlsx file open successfully.");
+		} else {
+			System.out.println("Error to open openworkbook.xlsx file.");
+		}
+
+		// Open the existing sheet
+
+		spreadsheet = workbook.getSheet("Employee Info");
+
+		row = spreadsheet.createRow(spreadsheet.getLastRowNum()+1);
+		
+		// Get part data from textfields
+		
+		ArrayList<String> row_data = new ArrayList<String>();
+		
+		row_data.add(AddPartFrame.textfield_partname.getText());
+		row_data.add(AddPartFrame.textField_manufacturer.getText());
+		row_data.add(AddPartFrame.textField_idnumber.getText());
+		row_data.add((String) AddPartFrame.comboBox_room.getSelectedItem());
+		row_data.add(AddPartFrame.textField_binroom.getText() + "-" + this.textField_binid.getText());
+		row_data.add(this.textField_quantity.getText());
+		
+		for(int i=0; i < 6;i++){
+			cell = row.createCell(i);
+			cell.setCellValue(row_data.get(i));
+		}
+		
+		
+		
 		// Write the workbook in file system
-		FileOutputStream out = new FileOutputStream(new File("database.xlsx"));
+		FileOutputStream out = new FileOutputStream("database.xlsx");
 		workbook.write(out);
 		out.close();
-		System.out.println("Writesheet.xlsx written successfully");
-
+	
+		readExcel();
+		
 	}
 
 	@Override
@@ -249,3 +274,58 @@ public class AddPartFrame extends JFrame implements ActionListener {
 
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
