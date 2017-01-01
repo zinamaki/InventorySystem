@@ -16,7 +16,21 @@ public class MainMenuFrame extends JFrame implements ActionListener {
 	private JButton btnNewButton;
 	
 	private JPanel contentPane;
+	
+	Color tron_orange = new Color(223,116,12);
 
+	Color tron_yellow = new Color(255,230,77);
+
+	Color tron_pane = new Color(230,255,255);
+
+	Color tron_blue = new Color(111,195,223);
+
+	Color tron_black = new Color(12,20,31);
+	Color background = new Color(54,54,54);
+	Color text = new Color(232,23,93);
+	Color accent = new Color(168,167,168);
+	Color button_text = new Color(71,71,71);
+	
 	/**
 	 * Launch the application.
 	 */
@@ -47,19 +61,24 @@ public class MainMenuFrame extends JFrame implements ActionListener {
 		btnNewButton = new JButton("Add Part");
 		btnNewButton.addActionListener(this);
 		btnNewButton.setBounds(524, 267, 233, 38);
+		btnNewButton.setBackground(accent);
+		btnNewButton.setForeground(button_text);
 		contentPane.add(btnNewButton);
 		
 		JLabel lblInventory = new JLabel("Inventory");
 		lblInventory.setFont(new Font("Tahoma", Font.PLAIN, 60));
 		lblInventory.setBounds(84, 255, 264, 121);
+		lblInventory.setForeground(text);
 		contentPane.add(lblInventory);
 		
 		btnSearchPart = new JButton("Search Part");
 		btnSearchPart.setBounds(524, 316, 233, 38);
 		btnSearchPart.addActionListener(this);
+		btnSearchPart.setBackground(accent);
+		btnSearchPart.setForeground(button_text);
 		contentPane.add(btnSearchPart);
 		
-		contentPane.setBackground(new Color(127, 140, 141));
+		contentPane.setBackground(background);
 	}
 
 	@Override

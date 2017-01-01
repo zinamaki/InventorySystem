@@ -38,12 +38,21 @@ public class AddPartFrame extends JFrame implements ActionListener {
 	public static JTextField textField_binid;
 	public static JComboBox comboBox_room;
 
+	private JButton btnSubmit;
+	private JButton btnBack;
+	
 	FileInputStream fIP;
 	XSSFSheet spreadsheet;
 	Cell cell;
 	// Create row object
 	XSSFRow row;
 
+	Color background = new Color(54,54,54);
+	Color text = new Color(232,23,93);
+	Color accent = new Color(168,167,168);
+	Color button_text = new Color(71,71,71);
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -71,48 +80,54 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 
 		JLabel lblAddPart = new JLabel("Add Part");
-		lblAddPart.setBounds(139, 43, 180, 64);
-		lblAddPart.setFont(new Font("Corbel", Font.PLAIN, 40));
+		lblAddPart.setBounds(139, 43, 200, 64);
+		lblAddPart.setFont(new Font("Corbel", Font.PLAIN, 50));
+		lblAddPart.setForeground(text);
 
 		JLabel lblPartName = new JLabel("Part Name:");
 		lblPartName.setBounds(77, 201, 69, 17);
 		lblPartName.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPartName.setForeground(new Color(52, 152, 219));
+		lblPartName.setForeground(text);
 
 		JLabel lblManufacturer = new JLabel("Manufacturer:");
 		lblManufacturer.setBounds(77, 260, 86, 17);
 		lblManufacturer.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblManufacturer.setForeground(text);
 
 		JLabel lblIdNumber = new JLabel("ID Number:");
 		lblIdNumber.setBounds(77, 320, 72, 17);
 		lblIdNumber.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblIdNumber.setForeground(text);
 
 		JLabel lblRoom = new JLabel("Room:");
 		lblRoom.setBounds(77, 373, 42, 17);
 		lblRoom.setFont(new Font("Tahoma", Font.PLAIN, 14));
-
+		lblRoom.setForeground(text);
+		
 		JLabel lblBin = new JLabel("Bin:");
 		lblBin.setBounds(77, 422, 23, 17);
 		lblBin.setFont(new Font("Tahoma", Font.PLAIN, 14));
-
+		lblBin.setForeground(text);
+		
 		JLabel lblQuantity = new JLabel("Quantity:");
 		lblQuantity.setBounds(77, 473, 58, 17);
 		lblQuantity.setFont(new Font("Tahoma", Font.PLAIN, 14));
-
+		lblQuantity.setForeground(text);
+		
 		textfield_partname = new JTextField();
-		textfield_partname.setBounds(214, 201, 105, 20);
+		textfield_partname.setBounds(214, 201, 249, 20);
 		textfield_partname.setColumns(10);
 
 		textField_manufacturer = new JTextField();
-		textField_manufacturer.setBounds(214, 260, 105, 20);
+		textField_manufacturer.setBounds(214, 260, 249, 20);
 		textField_manufacturer.setColumns(10);
 
 		textField_idnumber = new JTextField();
-		textField_idnumber.setBounds(214, 320, 105, 20);
+		textField_idnumber.setBounds(214, 320, 249, 20);
 		textField_idnumber.setColumns(10);
 
 		comboBox_room = new JComboBox();
-		comboBox_room.setBounds(214, 373, 105, 20);
+		comboBox_room.setBounds(214, 373, 249, 20);
 
 		comboBox_room.addItem("Mezzanine");
 		comboBox_room.addItem("Electrical Room");
@@ -121,16 +136,17 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		comboBox_room.addItem("Plant");
 
 		textField_quantity = new JTextField();
-		textField_quantity.setBounds(214, 473, 105, 20);
+		textField_quantity.setBounds(214, 473, 249, 20);
 		textField_quantity.setColumns(10);
 
-		JButton btnSubmit = new JButton("Submit");
-		btnSubmit.setBounds(132, 558, 65, 23);
-
+		btnSubmit = new JButton("Submit");
+		btnSubmit.setBounds(139, 546, 200, 36);
+		btnSubmit.setBackground(accent);
+		btnSubmit.setForeground(button_text);
 		btnSubmit.addActionListener(this);
 
 		textField_binroom = new JTextField();
-		textField_binroom.setBounds(214, 422, 42, 20);
+		textField_binroom.setBounds(214, 422, 86, 20);
 		textField_binroom.setColumns(10);
 		contentPane.setBackground(new Color(236, 240, 241));
 		contentPane.setForeground(new Color(52, 152, 219));
@@ -151,13 +167,23 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		contentPane.add(comboBox_room);
 
 		JLabel label = new JLabel("-");
-		label.setBounds(266, 425, 14, 14);
+		label.setFont(new Font("Tahoma", Font.PLAIN, 26));
+		label.setBounds(333, 425, 34, 14);
 		contentPane.add(label);
-
+		label.setForeground(text);
 		textField_binid = new JTextField();
-		textField_binid.setBounds(276, 422, 42, 20);
+		textField_binid.setBounds(377, 422, 86, 20);
 		contentPane.add(textField_binid);
 		textField_binid.setColumns(10);
+		contentPane.setBackground(background);
+		
+		btnBack = new JButton("Back");
+		btnBack.setBounds(35, 43, 69, 50);
+		btnBack.setBackground(accent);
+		btnBack.setForeground(button_text);
+		btnBack.addActionListener(this);
+		contentPane.add(btnBack);
+
 	}
 
 	public void readExcel() throws IOException {
@@ -259,16 +285,25 @@ public class AddPartFrame extends JFrame implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		// when the submit button is pressed do this action
-		System.out.println("part added");
-		try {
-			writeExcel();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
+		JButton buttonPressed = (JButton) e.getSource();
+
+		if (buttonPressed.equals(btnSubmit)){
+			try {
+				writeExcel();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}else if(buttonPressed.equals(btnBack)){
+			System.out.println("Back");
+			Inventory.mainmenuframe.setVisible(true);
+			Inventory.addpartframe.setVisible(false);
 		}
+		
 
 	}
 }
