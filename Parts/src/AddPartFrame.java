@@ -42,7 +42,8 @@ public class AddPartFrame extends JFrame implements ActionListener {
 	XSSFSheet spreadsheet;
 	Cell cell;
 	// Create row object
-			XSSFRow row;
+	XSSFRow row;
+
 	/**
 	 * Launch the application.
 	 */
@@ -159,8 +160,8 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		textField_binid.setColumns(10);
 	}
 
-	public void readExcel() throws IOException{
-		
+	public void readExcel() throws IOException {
+
 		Iterator<Row> rowIterator = spreadsheet.iterator();
 		while (rowIterator.hasNext()) {
 			row = (XSSFRow) rowIterator.next();
@@ -178,25 +179,25 @@ public class AddPartFrame extends JFrame implements ActionListener {
 			}
 			System.out.println();
 		}
-		//fIP.close();
+		// fIP.close();
 
 	}
-	
-	public void setupExcel(){
-		
+
+	public void setupExcel() {
+
 		// This data needs to be written (Object[])
-		
+
 		Map<String, Object[]> empinfo = new TreeMap<String, Object[]>();
-		
+
 		empinfo.put("1", new Object[] { "PART NAME", "MANUFACTURER", "ID NUMBER", "ROOM", "BIN", "Quantity" });
 		empinfo.put("2", new Object[] { "tp01", "Gopal", "Technical Manager" });
 		empinfo.put("3", new Object[] { "tp02", "", "Proof Reader" });
 		empinfo.put("4", new Object[] { "tp03", "Masthan", "Technical Writer" });
 		empinfo.put("5", new Object[] { "tp04", "sdfggfgfgf", "Technical Writer" });
 		empinfo.put("6", new Object[] { "tp05", "Krishna", "Technical Writer" });
-		
+
 		// Iterate over data and write to sheet
-		
+
 		Set<String> keyid = empinfo.keySet();
 		int rowid = 0;
 		for (String key : keyid) {
@@ -208,19 +209,18 @@ public class AddPartFrame extends JFrame implements ActionListener {
 				cell.setCellValue((String) obj);
 			}
 		}
-	
-	}
-	
-	public void writeExcel() throws Exception {
 
+	}
+
+	public void writeExcel() throws Exception {
 
 		File file = new File("database.xlsx");
 		FileInputStream fIP = new FileInputStream("database.xlsx");
-		
+
 		// Get the workbook instance for XLSX file
-		
+
 		XSSFWorkbook workbook = new XSSFWorkbook(fIP);
-		
+
 		if (file.isFile() && file.exists()) {
 			System.out.println("openworkbook.xlsx file open successfully.");
 		} else {
@@ -231,33 +231,31 @@ public class AddPartFrame extends JFrame implements ActionListener {
 
 		spreadsheet = workbook.getSheet("Employee Info");
 
-		row = spreadsheet.createRow(spreadsheet.getLastRowNum()+1);
-		
+		row = spreadsheet.createRow(spreadsheet.getLastRowNum() + 1);
+
 		// Get part data from textfields
-		
+
 		ArrayList<String> row_data = new ArrayList<String>();
-		
+
 		row_data.add(AddPartFrame.textfield_partname.getText());
 		row_data.add(AddPartFrame.textField_manufacturer.getText());
 		row_data.add(AddPartFrame.textField_idnumber.getText());
 		row_data.add((String) AddPartFrame.comboBox_room.getSelectedItem());
 		row_data.add(AddPartFrame.textField_binroom.getText() + "-" + this.textField_binid.getText());
 		row_data.add(this.textField_quantity.getText());
-		
-		for(int i=0; i < 6;i++){
+
+		for (int i = 0; i < 6; i++) {
 			cell = row.createCell(i);
 			cell.setCellValue(row_data.get(i));
 		}
-		
-		
-		
+
 		// Write the workbook in file system
 		FileOutputStream out = new FileOutputStream("database.xlsx");
 		workbook.write(out);
 		out.close();
-	
+
 		readExcel();
-		
+
 	}
 
 	@Override
@@ -274,58 +272,3 @@ public class AddPartFrame extends JFrame implements ActionListener {
 
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
