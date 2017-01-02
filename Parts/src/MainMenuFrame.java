@@ -90,6 +90,8 @@ public class MainMenuFrame extends JFrame implements ActionListener {
 		
 		if (buttonPressed.equals(btnSearchPart)){
 			System.out.println("Search for a Part");
+			Inventory.mainmenuframe.setVisible(false);
+			Inventory.searchpartframe.setVisible(true);
 		}else if(buttonPressed.equals(btnNewButton)){
 			System.out.println("Add a Part");
 			Inventory.mainmenuframe.setVisible(false);

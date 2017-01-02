@@ -11,6 +11,7 @@ public class Inventory
 	public static AddPartFrame addpartframe;
 	public static EditPartFrame editpartframe;
 	public static MainMenuFrame mainmenuframe;
+	public static SearchPartFrame searchpartframe;
 	
 	public static void main(String[] args)
 	{
@@ -51,6 +52,15 @@ public class Inventory
 		editpartframe.setLocation(dim.width / 2 - mainmenuframe.getSize().width / 2, dim.height / 2 - mainmenuframe.getSize().height / 2);
 		editpartframe.setSize(800,800);
 		editpartframe.setVisible(false);
+		
+		searchpartframe = new SearchPartFrame();
+		searchpartframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		searchpartframe.setTitle("Edit Part");
+		searchpartframe.pack();
+		
+		searchpartframe.setLocation(dim.width / 2 - mainmenuframe.getSize().width / 2, dim.height / 2 - mainmenuframe.getSize().height / 2);
+		searchpartframe.setSize(800,800);
+		searchpartframe.setVisible(false);
 		
 	}
 }
