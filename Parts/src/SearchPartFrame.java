@@ -29,12 +29,16 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+
 
 import javax.swing.JSeparator;
 import javax.swing.JTable;
@@ -145,62 +149,7 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 				{ "Eat-Less", new Integer(333), new Boolean(false), new Boolean(false), 1.75,  2.50 },
 				{ "Chewbacca", new Integer(456), new Boolean(false), new Boolean(false), 1.75,  1.85 },
 				{ "Arrow", new Integer(375), new Boolean(false), new Boolean(false), 1.75,  1.75 },
-				{ "Red Rocket", new Integer(300), new Boolean(false), new Boolean(true), 1.75,  2.3456 },
-				 { "Mr. Small", new Integer(95), new Boolean(false), new Boolean(false), 1.75, 1.75 },
-					{ "Kispy Kunch", new Integer(450), new Boolean(false), new Boolean(false), 1.75, 2.25 },
-					{ "Kitch Katch", new Integer(400), new Boolean(false), new Boolean(true), 1.75,  2.75 },
-					{ "Wunderbloat", new Integer(1300), new Boolean(false), new Boolean(false), 1.75,  2.65 },
-					{ "Saramilk", new Integer(295), new Boolean(false), new Boolean(true), 1.75,  1.25 },
-					{ "Big Swede", new Integer(300), new Boolean(false), new Boolean(false), 1.75,  3.10 },
-					{ "Oh Hank", new Integer(450), new Boolean(false), new Boolean(false), 1.75,  4.25 },
-					{ "Eat-Less", new Integer(333), new Boolean(false), new Boolean(false), 1.75,  2.50 },
-					{ "Chewbacca", new Integer(456), new Boolean(false), new Boolean(false), 1.75,  1.85 },
-					{ "Arrow", new Integer(375), new Boolean(false), new Boolean(false), 1.75,  1.75 },
-					{ "Red Rocket", new Integer(300), new Boolean(false), new Boolean(true), 1.75,  2.3456 } ,
-					 { "Mr. Small", new Integer(95), new Boolean(false), new Boolean(false), 1.75, 1.75 },
-						{ "Kispy Kunch", new Integer(450), new Boolean(false), new Boolean(false), 1.75, 2.25 },
-						{ "Kitch Katch", new Integer(400), new Boolean(false), new Boolean(true), 1.75,  2.75 },
-						{ "Wunderbloat", new Integer(1300), new Boolean(false), new Boolean(false), 1.75,  2.65 },
-						{ "Saramilk", new Integer(295), new Boolean(false), new Boolean(true), 1.75,  1.25 },
-						{ "Big Swede", new Integer(300), new Boolean(false), new Boolean(false), 1.75,  3.10 },
-						{ "Oh Hank", new Integer(450), new Boolean(false), new Boolean(false), 1.75,  4.25 },
-						{ "Eat-Less", new Integer(333), new Boolean(false), new Boolean(false), 1.75,  2.50 },
-						{ "Chewbacca", new Integer(456), new Boolean(false), new Boolean(false), 1.75,  1.85 },
-						{ "Arrow", new Integer(375), new Boolean(false), new Boolean(false), 1.75,  1.75 },
-						{ "Red Rocket", new Integer(300), new Boolean(false), new Boolean(true), 1.75,  2.3456 } ,
-						 { "Mr. Small", new Integer(95), new Boolean(false), new Boolean(false), 1.75, 1.75 },
-							{ "Kispy Kunch", new Integer(450), new Boolean(false), new Boolean(false), 1.75, 2.25 },
-							{ "Kitch Katch", new Integer(400), new Boolean(false), new Boolean(true), 1.75,  2.75 },
-							{ "Wunderbloat", new Integer(1300), new Boolean(false), new Boolean(false), 1.75,  2.65 },
-							{ "Saramilk", new Integer(295), new Boolean(false), new Boolean(true), 1.75,  1.25 },
-							{ "Big Swede", new Integer(300), new Boolean(false), new Boolean(false), 1.75,  3.10 },
-							{ "Oh Hank", new Integer(450), new Boolean(false), new Boolean(false), 1.75,  4.25 },
-							{ "Eat-Less", new Integer(333), new Boolean(false), new Boolean(false), 1.75,  2.50 },
-							{ "Chewbacca", new Integer(456), new Boolean(false), new Boolean(false), 1.75,  1.85 },
-							{ "Arrow", new Integer(375), new Boolean(false), new Boolean(false), 1.75,  1.75 },
-							{ "Red Rocket", new Integer(300), new Boolean(false), new Boolean(true), 1.75,  2.3456 } 
-							, { "Mr. Small", new Integer(95), new Boolean(false), new Boolean(false), 1.75, 1.75 },
-							{ "Kispy Kunch", new Integer(450), new Boolean(false), new Boolean(false), 1.75, 2.25 },
-							{ "Kitch Katch", new Integer(400), new Boolean(false), new Boolean(true), 1.75,  2.75 },
-							{ "Wunderbloat", new Integer(1300), new Boolean(false), new Boolean(false), 1.75,  2.65 },
-							{ "Saramilk", new Integer(295), new Boolean(false), new Boolean(true), 1.75,  1.25 },
-							{ "Big Swede", new Integer(300), new Boolean(false), new Boolean(false), 1.75,  3.10 },
-							{ "Oh Hank", new Integer(450), new Boolean(false), new Boolean(false), 1.75,  4.25 },
-							{ "Eat-Less", new Integer(333), new Boolean(false), new Boolean(false), 1.75,  2.50 },
-							{ "Chewbacca", new Integer(456), new Boolean(false), new Boolean(false), 1.75,  1.85 },
-							{ "Arrow", new Integer(375), new Boolean(false), new Boolean(false), 1.75,  1.75 },
-							{ "Red Rocket", new Integer(300), new Boolean(false), new Boolean(true), 1.75,  2.3456 } 
-							, { "Mr. Small", new Integer(95), new Boolean(false), new Boolean(false), 1.75, 1.75 },
-							{ "Kispy Kunch", new Integer(450), new Boolean(false), new Boolean(false), 1.75, 2.25 },
-							{ "Kitch Katch", new Integer(400), new Boolean(false), new Boolean(true), 1.75,  2.75 },
-							{ "Wunderbloat", new Integer(1300), new Boolean(false), new Boolean(false), 1.75,  2.65 },
-							{ "Saramilk", new Integer(295), new Boolean(false), new Boolean(true), 1.75,  1.25 },
-							{ "Big Swede", new Integer(300), new Boolean(false), new Boolean(false), 1.75,  3.10 },
-							{ "Oh Hank", new Integer(450), new Boolean(false), new Boolean(false), 1.75,  4.25 },
-							{ "Eat-Less", new Integer(333), new Boolean(false), new Boolean(false), 1.75,  2.50 },
-							{ "Chewbacca", new Integer(456), new Boolean(false), new Boolean(false), 1.75,  1.85 },
-							{ "Arrow", new Integer(375), new Boolean(false), new Boolean(false), 1.75,  1.75 },
-							{ "Red Rocket", new Integer(300), new Boolean(false), new Boolean(true), 1.75,  2.3456 } };
+				{ "Red Rocket", new Integer(300), new Boolean(false), new Boolean(true), 1.75,  2.3456 } };
 
 		CustomTableModel ctm = new CustomTableModel(rowData, columnNames);
 		ctm.setColumnEditable(3, true);
@@ -274,9 +223,27 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
+	public void mouseClicked(MouseEvent me) {
 		// TODO Auto-generated method stub
-		
+		JTableHeader source = (JTableHeader) me.getSource();
+
+		// get index of selected column IN THE VIEW
+		// (Note: this changes if columns are moved by dragging with mouse)
+
+		TableColumnModel tcm = source.getColumnModel();
+		int tmp = tcm.getColumnIndexAtX(me.getX());
+		System.out.println("First idx = " + tmp);
+
+		// get index of selected column IN THE MODEL
+
+		TableColumn tc = tcm.getColumn(tmp);
+		int idx = tc.getModelIndex();
+		System.out.println("Second idx= " + idx);
+
+		// get the data model, and do the sort
+
+		CustomTableModel ctm = (CustomTableModel) (source.getTable().getModel());
+		ctm.sort(idx);
 	}
 
 	@Override
@@ -333,7 +300,7 @@ class CustomTableModel extends AbstractTableModel
 
 		sortedColumn = idx;
 
-		//Arrays.sort(rowData, new Comparator(idx, sortOrder));
+		Arrays.sort(rowData, new CustomComparator(idx, sortOrder));
 	}
 
 	@Override
@@ -382,5 +349,75 @@ class CustomTableModel extends AbstractTableModel
 	public void setColumnEditable(int colArg, boolean editableArg)
 	{
 		editable[colArg] = editableArg;
+	}
+}
+class CustomComparator implements Comparator<Object>
+{
+	// the following avoids a "warning" with Java 1.5.0 complier (?)
+	static final long serialVersionUID = 42L;
+
+	private boolean sortOrder; // true = ascending, false = decending
+	private int idx; // column index
+
+	CustomComparator(int idxArg, boolean sortOrderArg)
+	{
+		sortOrder = sortOrderArg;
+		idx = idxArg;
+	}
+
+	@Override
+	public int compare(Object o1, Object o2)
+	{
+		// cast the objects into row arrays
+
+		Object[] a1 = (Object[]) o1;
+		Object[] a2 = (Object[]) o2;
+
+		// retrieve the cell contents at the specified column index
+
+		Object c1 = a1[idx];
+		Object c2 = a2[idx];
+
+		// determine the data type, and perform the comparison
+
+		if (c1 instanceof Number)
+		{
+			double d1 = ((Number) c1).doubleValue();
+			double d2 = ((Number) c2).doubleValue();
+
+			if (d1 == d2)
+				return 0;
+
+			if (sortOrder)
+				return (d1 - d2) > 0 ? 1 : -1;
+			else
+				return (d1 - d2) > 0 ? -1 : 1;
+		}
+
+		else if (c1 instanceof Boolean)
+		{
+			boolean b1 = ((Boolean) c1).booleanValue();
+			boolean b2 = ((Boolean) c2).booleanValue();
+
+			if (b1 == b2)
+				return 0;
+
+			if (sortOrder)
+				return b1 ? 0 : 1; // 'ascending' (trues first)
+			else
+				return b1 ? 1 : 0; // 'descending' (falses first)
+		}
+
+		else
+		// treat all other classes as strings
+		{
+			String s1 = c1.toString();
+			String s2 = c2.toString();
+
+			if (sortOrder)
+				return s1.compareTo(s2); // ascending
+			else
+				return s2.compareTo(s1); // descending
+		}
 	}
 }
