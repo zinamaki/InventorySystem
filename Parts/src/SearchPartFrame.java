@@ -217,8 +217,38 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 		
 	}
 	
-	public static Object[][] getRowData() {
+	public static void refreshSpreadsheet() throws IOException{
+		
+		File file = new File("database.xlsx");
+		FileInputStream fIP = new FileInputStream("database.xlsx");
 
+		// Get the workbook instance for XLSX file
+
+		XSSFWorkbook workbook = new XSSFWorkbook(fIP);
+
+		if (file.isFile() && file.exists()) {
+			System.out.println("openworkbook.xlsx file open successfully.");
+		} else {
+			System.out.println("Error to open openworkbook.xlsx file.");
+		}
+
+		// Open the existing sheet
+
+		spreadsheet = workbook.getSheet("Employee Info");
+		
+		FileOutputStream out = new FileOutputStream("database.xlsx");
+		workbook.write(out);
+		out.close();
+
+		
+		
+	}
+	
+	public static Object[][] getRowData() throws IOException {
+
+		refreshSpreadsheet();
+		
+		
 		Object[][] rowData = new Object[spreadsheet.getLastRowNum()][6];
 		int rowCounter;
 		int cellCounter;
@@ -418,7 +448,12 @@ class CustomTableModel extends AbstractTableModel {
 	}
 	
 	public void refresh(){
-		rowData = SearchPartFrame.getRowData();
+		try {
+			this.rowData = SearchPartFrame.getRowData();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fireTableDataChanged();
 	}
 	
