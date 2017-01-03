@@ -3,6 +3,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -90,6 +91,11 @@ public class MainMenuFrame extends JFrame implements ActionListener {
 		
 		if (buttonPressed.equals(btnSearchPart)){
 			System.out.println("Search for a Part");
+			
+			
+			SearchPartFrame.ctm.refresh();
+			
+			
 			Inventory.mainmenuframe.setVisible(false);
 			Inventory.searchpartframe.setVisible(true);
 		}else if(buttonPressed.equals(btnNewButton)){

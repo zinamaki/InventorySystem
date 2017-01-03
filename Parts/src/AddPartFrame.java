@@ -280,10 +280,20 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		workbook.write(out);
 		out.close();
 
-		readExcel();
+		
 
 	}
 
+	public void resetPage(){
+		textfield_partname.setText("");
+		textField_manufacturer.setText("");
+		textField_idnumber.setText("");
+		comboBox_room.setSelectedItem("Mezzanine");
+		textField_binroom.setText("");
+		textField_binid.setText("");
+		textField_quantity.setText("");
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -294,6 +304,8 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		if (buttonPressed.equals(btnSubmit)){
 			try {
 				writeExcel();
+				readExcel();
+				resetPage();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

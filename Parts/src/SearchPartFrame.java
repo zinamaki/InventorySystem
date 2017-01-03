@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,8 +39,6 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-
-
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 
@@ -50,22 +49,24 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 	public static JComboBox comboBox_cat;
 	private JButton btnBack;
 	private JButton btnSearch;
-	
-	FileInputStream fIP;
-	XSSFSheet spreadsheet;
-	Cell cell;
-	// Create row object
-	XSSFRow row;
 
-	Color background = new Color(54,54,54);
-	Color text = new Color(232,23,93);
-	Color accent = new Color(168,167,168);
-	Color button_text = new Color(71,71,71);
+	FileInputStream fIP;
+	static XSSFSheet spreadsheet;
+	static Cell cell;
+	// Create row object
+	static XSSFRow row;
+
+	static CustomTableModel ctm;
+	static JTable t; 
+	
+	Color background = new Color(54, 54, 54);
+	Color text = new Color(232, 23, 93);
+	Color accent = new Color(168, 167, 168);
+	Color button_text = new Color(71, 71, 71);
 	private JTable table;
 	private JTable table_1;
 	private JTable table_2;
-	
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -84,8 +85,10 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 
 	/**
 	 * Create the frame.
+	 * 
+	 * @throws IOException
 	 */
-	public SearchPartFrame() {
+	public SearchPartFrame() throws IOException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 888, 788);
 		contentPane = new JPanel();
@@ -96,7 +99,7 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 		lblAddPart.setBounds(139, 43, 262, 64);
 		lblAddPart.setFont(new Font("Corbel", Font.PLAIN, 50));
 		lblAddPart.setForeground(text);
-		
+
 		textfield_partname = new JTextField();
 		textfield_partname.setBounds(268, 137, 249, 20);
 		textfield_partname.setColumns(10);
@@ -116,51 +119,37 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 		contentPane.add(textfield_partname);
 		contentPane.add(comboBox_cat);
 		contentPane.setBackground(background);
-		
+
 		btnBack = new JButton("Back");
 		btnBack.setBounds(35, 43, 69, 50);
 		btnBack.setBackground(accent);
 		btnBack.setForeground(button_text);
 		btnBack.addActionListener(this);
 		contentPane.add(btnBack);
-		
+
 		JLabel lblSearchBy = new JLabel("Search by: ");
 		lblSearchBy.setForeground(new Color(232, 23, 93));
 		lblSearchBy.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblSearchBy.setBounds(35, 137, 86, 17);
 		contentPane.add(lblSearchBy);
-		
+
 		btnSearch = new JButton("Search");
 		btnSearch.addActionListener(this);
 		btnSearch.setForeground(new Color(71, 71, 71));
 		btnSearch.setBackground(new Color(168, 167, 168));
 		btnSearch.setBounds(527, 137, 147, 21);
 		contentPane.add(btnSearch);
+
+		setupTable();
 		
-		Object[] columnNames = { "Part Name", "Manufacturer", "ID Number", "Room", "Bin", "Quantity" };
-
-		Object[][] rowData = { { "Mr. Small", new Integer(95), new Boolean(false), new Boolean(true), 1.75, 1.75, new Boolean(false), 1.75 },
-				{ "Kispy Kunch", new Integer(450), new Boolean(false), new Boolean(false), 1.75, 2.25 },
-				{ "Kitch Katch", new Integer(400), new Boolean(false), new Boolean(true), 1.75,  2.75 },
-				{ "Wunderbloat", new Integer(1300), new Boolean(false), new Boolean(false), 1.75,  2.65 },
-				{ "Saramilk", new Integer(295), new Boolean(false), new Boolean(true), 1.75,  1.25 },
-				{ "Big Swede", new Integer(300), new Boolean(false), new Boolean(false), 1.75,  3.10 },
-				{ "Oh Hank", new Integer(450), new Boolean(false), new Boolean(false), 1.75,  4.25 },
-				{ "Eat-Less", new Integer(333), new Boolean(false), new Boolean(false), 1.75,  2.50 },
-				{ "Chewbacca", new Integer(456), new Boolean(false), new Boolean(false), 1.75,  1.85 },
-				{ "Arrow", new Integer(375), new Boolean(false), new Boolean(false), 1.75,  1.75 },
-				{ "Red Rocket", new Integer(300), new Boolean(false), new Boolean(true), 1.75,  2.3456 } };
-
-		CustomTableModel ctm = new CustomTableModel(rowData, columnNames);
-		ctm.setColumnEditable(3, true);
-
-		JTable t = new JTable(ctm);
+		
+		
+		t = setupTable();
+		
 		t.setPreferredScrollableViewportSize(new Dimension(300, 100));
 
 		// The following lines set the default editor and renderer for
 		// any column containing Currency objects.
-
-
 
 		JScrollPane sp = new JScrollPane(t);
 		sp.setBounds(10, 180, 800, 558);
@@ -176,8 +165,97 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 		// ------------------
 
 		contentPane.add(sp);
-		
 
+		
+	}
+
+	public static void refreshTable() throws IOException{
+		
+	
+		
+		//Object[] columnNames = { "Part Name", "Manufacturer", "ID Number", "Room", "Bin", "Quantity" };
+		
+		CustomTableModel model = (CustomTableModel) t.getModel();
+		model.refresh();
+		t.setModel(model);
+
+	}
+	
+	
+	public static JTable setupTable() throws IOException{
+		File file = new File("database.xlsx");
+		FileInputStream fIP = new FileInputStream("database.xlsx");
+
+		// Get the workbook instance for XLSX file
+
+		XSSFWorkbook workbook = new XSSFWorkbook(fIP);
+
+		if (file.isFile() && file.exists()) {
+			System.out.println("openworkbook.xlsx file open successfully.");
+		} else {
+			System.out.println("Error to open openworkbook.xlsx file.");
+		}
+
+		// Open the existing sheet
+
+		spreadsheet = workbook.getSheet("Employee Info");
+
+		Object[] columnNames = { "Part Name", "Manufacturer", "ID Number", "Room", "Bin", "Quantity" };
+		
+		ctm = new CustomTableModel(getRowData(), columnNames);
+		//ctm.setColumnEditable(3, true);
+		
+		JTable fresh_table = new JTable(ctm);
+				
+		// Write the workbook in file system
+		FileOutputStream out = new FileOutputStream("database.xlsx");
+		workbook.write(out);
+		out.close();
+
+		return fresh_table;
+		
+		
+	}
+	
+	public static Object[][] getRowData() {
+
+		Object[][] rowData = new Object[spreadsheet.getLastRowNum()][6];
+		int rowCounter;
+		int cellCounter;
+
+		// rowData[0][0] = {"Mr.Small"};
+
+		Iterator<Row> rowIterator = spreadsheet.iterator();
+		rowCounter = 0;
+		row = (XSSFRow) rowIterator.next();
+		while (rowIterator.hasNext()) {
+			row = (XSSFRow) rowIterator.next();
+			Iterator<Cell> cellIterator = row.cellIterator();
+
+			cellCounter = 0;
+
+			while (cellIterator.hasNext()) {
+
+				cell = cellIterator.next();
+				switch (cell.getCellType()) {
+				case Cell.CELL_TYPE_NUMERIC:
+					rowData[rowCounter][cellCounter] = cell.getNumericCellValue();
+					// rowData.add("" + cell.getNumericCellValue());
+					break;
+				case Cell.CELL_TYPE_STRING:
+					rowData[rowCounter][cellCounter] = cell.getStringCellValue();
+					// rowData.add(cell.getStringCellValue());
+					break;
+				}
+				cellCounter++;
+				//System.out.println("	Cell = " + cellCounter);
+			}
+
+			rowCounter++;
+			//System.out.println("Row = " + rowCounter);
+		}
+
+		return rowData;
 	}
 
 	public void readExcel() throws IOException {
@@ -190,10 +268,10 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 				cell = cellIterator.next();
 				switch (cell.getCellType()) {
 				case Cell.CELL_TYPE_NUMERIC:
-					System.out.print(cell.getNumericCellValue() + " \t\t ");
+					System.out.print(cell.getNumericCellValue() + " ");
 					break;
 				case Cell.CELL_TYPE_STRING:
-					System.out.print(cell.getStringCellValue() + " \t\t ");
+					System.out.print(cell.getStringCellValue() + " ");
 					break;
 				}
 			}
@@ -203,22 +281,20 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 
 	}
 
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		// when the submit button is pressed do this action
-		
+
 		JButton buttonPressed = (JButton) e.getSource();
 
-		if (buttonPressed.equals(btnSearch)){
+		if (buttonPressed.equals(btnSearch)) {
 			System.out.println("Searching");
-		}else if(buttonPressed.equals(btnBack)){
+		} else if (buttonPressed.equals(btnBack)) {
 			System.out.println("Back");
 			Inventory.mainmenuframe.setVisible(true);
 			Inventory.searchpartframe.setVisible(false);
 		}
-		
 
 	}
 
@@ -232,13 +308,13 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 
 		TableColumnModel tcm = source.getColumnModel();
 		int tmp = tcm.getColumnIndexAtX(me.getX());
-		System.out.println("First idx = " + tmp);
+		//System.out.println("First idx = " + tmp);
 
 		// get index of selected column IN THE MODEL
 
 		TableColumn tc = tcm.getColumn(tmp);
 		int idx = tc.getModelIndex();
-		System.out.println("Second idx= " + idx);
+		//System.out.println("Second idx= " + idx);
 
 		// get the data model, and do the sort
 
@@ -249,29 +325,29 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
-class CustomTableModel extends AbstractTableModel
-{
+
+class CustomTableModel extends AbstractTableModel {
 	// the following avoids a "warning" with Java 1.5.0 complier (?)
 	static final long serialVersionUID = 42L;
 
@@ -282,8 +358,7 @@ class CustomTableModel extends AbstractTableModel
 	private int sortedColumn; // column on which table is currently sorted
 	private boolean sortOrder; // true = ascending, false = descending
 
-	public CustomTableModel(Object[][] rowData, Object[] columnNames)
-	{
+	public CustomTableModel(Object[][] rowData, Object[] columnNames) {
 		this.rowData = rowData;
 		this.columnNames = columnNames;
 		editable = new boolean[rowData.length];
@@ -291,8 +366,7 @@ class CustomTableModel extends AbstractTableModel
 		sortedColumn = -1; // means table not sorted initially
 	}
 
-	public void sort(int idx)
-	{
+	public void sort(int idx) {
 		if (sortedColumn == idx)
 			sortOrder = !sortOrder; // reverse the sort (clicked again)
 		else
@@ -304,70 +378,66 @@ class CustomTableModel extends AbstractTableModel
 	}
 
 	@Override
-	public int getColumnCount()
-	{
+	public int getColumnCount() {
 		return columnNames.length;
 	}
 
 	@Override
-	public int getRowCount()
-	{
+	public int getRowCount() {
 		return rowData.length;
 	}
 
 	@Override
-	public String getColumnName(int idx)
-	{
+	public String getColumnName(int idx) {
 		return (String) columnNames[idx];
 	}
 
 	@Override
-	public Object getValueAt(int row, int col)
-	{
+	public Object getValueAt(int row, int col) {
 		return rowData[row][col];
 	}
 
 	@Override
-	public Class<? extends Object> getColumnClass(int col)
-	{
+	public Class<? extends Object> getColumnClass(int col) {
 		return getValueAt(0, col).getClass();
 	}
 
 	@Override
-	public void setValueAt(Object value, int row, int col)
-	{
+	public void setValueAt(Object value, int row, int col) {
 		rowData[row][col] = value;
 		fireTableCellUpdated(row, col);
 	}
 
 	@Override
-	public boolean isCellEditable(int row, int col)
-	{
+	public boolean isCellEditable(int row, int col) {
 		return editable[col];
 	}
 
-	public void setColumnEditable(int colArg, boolean editableArg)
-	{
+	public void setColumnEditable(int colArg, boolean editableArg) {
 		editable[colArg] = editableArg;
 	}
+	
+	public void refresh(){
+		rowData = SearchPartFrame.getRowData();
+		fireTableDataChanged();
+	}
+	
 }
-class CustomComparator implements Comparator<Object>
-{
+
+class CustomComparator implements Comparator<Object> {
 	// the following avoids a "warning" with Java 1.5.0 complier (?)
 	static final long serialVersionUID = 42L;
 
 	private boolean sortOrder; // true = ascending, false = decending
 	private int idx; // column index
 
-	CustomComparator(int idxArg, boolean sortOrderArg)
-	{
+	CustomComparator(int idxArg, boolean sortOrderArg) {
 		sortOrder = sortOrderArg;
 		idx = idxArg;
 	}
 
 	@Override
-	public int compare(Object o1, Object o2)
-	{
+	public int compare(Object o1, Object o2) {
 		// cast the objects into row arrays
 
 		Object[] a1 = (Object[]) o1;
@@ -380,8 +450,7 @@ class CustomComparator implements Comparator<Object>
 
 		// determine the data type, and perform the comparison
 
-		if (c1 instanceof Number)
-		{
+		if (c1 instanceof Number) {
 			double d1 = ((Number) c1).doubleValue();
 			double d2 = ((Number) c2).doubleValue();
 
@@ -394,8 +463,7 @@ class CustomComparator implements Comparator<Object>
 				return (d1 - d2) > 0 ? -1 : 1;
 		}
 
-		else if (c1 instanceof Boolean)
-		{
+		else if (c1 instanceof Boolean) {
 			boolean b1 = ((Boolean) c1).booleanValue();
 			boolean b2 = ((Boolean) c2).booleanValue();
 

@@ -3,6 +3,7 @@ import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 
 
@@ -13,7 +14,7 @@ public class Inventory
 	public static MainMenuFrame mainmenuframe;
 	public static SearchPartFrame searchpartframe;
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
 		// use look and feel for my system (Win32)
 		try
@@ -30,7 +31,7 @@ public class Inventory
 		mainmenuframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainmenuframe.setTitle("Inventory System");
 		mainmenuframe.pack();
-		mainmenuframe.setSize(800,800);
+		mainmenuframe.setSize(900,800);
 		mainmenuframe.setLocation(dim.width / 2 - mainmenuframe.getSize().width / 2, dim.height / 2 - mainmenuframe.getSize().height / 2);
 		
 		mainmenuframe.setVisible(true);
@@ -39,7 +40,7 @@ public class Inventory
 		addpartframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		addpartframe.setTitle("Add Part");
 		addpartframe.pack();
-		addpartframe.setSize(800,800);
+		addpartframe.setSize(900,800);
 		addpartframe.setLocation(dim.width / 2 - mainmenuframe.getSize().width / 2, dim.height / 2 - mainmenuframe.getSize().height / 2);
 		
 		addpartframe.setVisible(false);
@@ -50,7 +51,7 @@ public class Inventory
 		editpartframe.pack();
 		
 		editpartframe.setLocation(dim.width / 2 - mainmenuframe.getSize().width / 2, dim.height / 2 - mainmenuframe.getSize().height / 2);
-		editpartframe.setSize(800,800);
+		editpartframe.setSize(900,800);
 		editpartframe.setVisible(false);
 		
 		searchpartframe = new SearchPartFrame();
@@ -59,7 +60,7 @@ public class Inventory
 		searchpartframe.pack();
 		
 		searchpartframe.setLocation(dim.width / 2 - mainmenuframe.getSize().width / 2, dim.height / 2 - mainmenuframe.getSize().height / 2);
-		searchpartframe.setSize(800,800);
+		searchpartframe.setSize(900,800);
 		searchpartframe.setVisible(false);
 		
 	}
