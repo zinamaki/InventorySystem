@@ -84,45 +84,45 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		lblAddPart.setForeground(text);
 
 		JLabel lblPartName = new JLabel("Part Name:");
-		lblPartName.setBounds(77, 201, 69, 17);
-		lblPartName.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblPartName.setBounds(77, 201, 200, 36);
+		lblPartName.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblPartName.setForeground(text);
 
 		JLabel lblManufacturer = new JLabel("Manufacturer:");
-		lblManufacturer.setBounds(77, 260, 86, 17);
-		lblManufacturer.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblManufacturer.setBounds(77, 260, 200, 36);
+		lblManufacturer.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblManufacturer.setForeground(text);
 
 		JLabel lblIdNumber = new JLabel("ID Number:");
-		lblIdNumber.setBounds(77, 320, 72, 17);
-		lblIdNumber.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblIdNumber.setBounds(77, 320, 200, 42);
+		lblIdNumber.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblIdNumber.setForeground(text);
 
 		JLabel lblRoom = new JLabel("Room:");
-		lblRoom.setBounds(77, 373, 42, 17);
-		lblRoom.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblRoom.setBounds(77, 373, 200, 38);
+		lblRoom.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblRoom.setForeground(text);
 
 		JLabel lblBin = new JLabel("Bin:");
-		lblBin.setBounds(77, 422, 23, 17);
-		lblBin.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblBin.setBounds(77, 422, 200, 40);
+		lblBin.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblBin.setForeground(text);
 
 		JLabel lblQuantity = new JLabel("Quantity:");
-		lblQuantity.setBounds(77, 473, 58, 17);
-		lblQuantity.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblQuantity.setBounds(77, 473, 200, 36);
+		lblQuantity.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblQuantity.setForeground(text);
 
 		textfield_partname = new JTextField();
-		textfield_partname.setBounds(214, 201, 249, 20);
+		textfield_partname.setBounds(352, 201, 249, 36);
 		textfield_partname.setColumns(10);
 
 		textField_idnumber = new JTextField();
-		textField_idnumber.setBounds(214, 320, 249, 20);
+		textField_idnumber.setBounds(352, 320, 249, 42);
 		textField_idnumber.setColumns(10);
 
 		comboBox_room = new JComboBox();
-		comboBox_room.setBounds(214, 373, 249, 20);
+		comboBox_room.setBounds(352, 373, 249, 38);
 
 		comboBox_room.addItem("Mezzanine");
 		comboBox_room.addItem("Electrical Room");
@@ -131,7 +131,7 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		comboBox_room.addItem("Plant");
 
 		textField_quantity = new JTextField();
-		textField_quantity.setBounds(214, 473, 249, 20);
+		textField_quantity.setBounds(352, 479, 249, 30);
 		textField_quantity.setColumns(10);
 
 		btnSubmit = new JButton("Submit");
@@ -141,7 +141,7 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		btnSubmit.addActionListener(this);
 
 		textField_binroom = new JTextField();
-		textField_binroom.setBounds(214, 422, 86, 20);
+		textField_binroom.setBounds(352, 422, 86, 40);
 		textField_binroom.setColumns(10);
 		contentPane.setBackground(new Color(236, 240, 241));
 		contentPane.setForeground(new Color(52, 152, 219));
@@ -162,11 +162,11 @@ public class AddPartFrame extends JFrame implements ActionListener {
 
 		JLabel label = new JLabel("-");
 		label.setFont(new Font("Tahoma", Font.PLAIN, 26));
-		label.setBounds(333, 425, 34, 14);
+		label.setBounds(465, 428, 34, 14);
 		contentPane.add(label);
 		label.setForeground(text);
 		textField_binid = new JTextField();
-		textField_binid.setBounds(377, 422, 86, 20);
+		textField_binid.setBounds(515, 422, 86, 40);
 		contentPane.add(textField_binid);
 		textField_binid.setColumns(10);
 		contentPane.setBackground(background);
@@ -179,7 +179,7 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		contentPane.add(btnBack);
 
 		comboBox_manufacturer = new JComboBox();
-		comboBox_manufacturer.setBounds(214, 260, 249, 20);
+		comboBox_manufacturer.setBounds(352, 260, 249, 36);
 		contentPane.add(comboBox_manufacturer);
 
 	}
