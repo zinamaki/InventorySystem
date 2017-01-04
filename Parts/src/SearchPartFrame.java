@@ -26,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
@@ -49,6 +50,7 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 	public static JComboBox comboBox_cat;
 	private JButton btnBack;
 	private JButton btnSearch;
+	private JButton btnEditPart;
 
 	FileInputStream fIP;
 	static XSSFSheet spreadsheet;
@@ -57,8 +59,8 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 	static XSSFRow row;
 
 	static CustomTableModel ctm;
-	static JTable t; 
-	
+	static JTable t;
+
 	Color background = new Color(54, 54, 54);
 	Color text = new Color(232, 23, 93);
 	Color accent = new Color(168, 167, 168);
@@ -90,7 +92,7 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 	 */
 	public SearchPartFrame() throws IOException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 888, 788);
+		setBounds(100, 100, 1494, 1120);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -141,18 +143,16 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 		contentPane.add(btnSearch);
 
 		setupTable();
-		
-		
-		
+
 		t = setupTable();
-		
+
 		t.setPreferredScrollableViewportSize(new Dimension(300, 100));
 
 		// The following lines set the default editor and renderer for
 		// any column containing Currency objects.
 
 		JScrollPane sp = new JScrollPane(t);
-		sp.setBounds(10, 180, 800, 558);
+		sp.setBounds(10, 180, 1243, 799);
 		// -----------------------------------------------------
 		// add a listener for mouse clicks on the table's header
 		// -----------------------------------------------------
@@ -166,23 +166,25 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 
 		contentPane.add(sp);
 
-		
-	}
-
-	public static void refreshTable() throws IOException{
-		
-	
-		
-		//Object[] columnNames = { "Part Name", "Manufacturer", "ID Number", "Room", "Bin", "Quantity" };
-		
-		CustomTableModel model = (CustomTableModel) t.getModel();
-		model.refresh();
-		t.setModel(model);
+		btnEditPart = new JButton("Edit Part");
+		btnEditPart.setBounds(1337, 495, 89, 23);
+		btnEditPart.addActionListener(this);
+		contentPane.add(btnEditPart);
 
 	}
-	
-	
-	public static JTable setupTable() throws IOException{
+
+	// public static void refreshTable() throws IOException{
+
+	// Object[] columnNames = { "Part Name", "Manufacturer", "ID Number",
+	// "Room", "Bin", "Quantity" };
+
+	// CustomTableModel model = (CustomTableModel) t.getModel();
+	// model.refresh();
+	// t.setModel(model);
+	//
+	// }
+
+	public static JTable setupTable() throws IOException {
 		File file = new File("database.xlsx");
 		FileInputStream fIP = new FileInputStream("database.xlsx");
 
@@ -201,24 +203,23 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 		spreadsheet = workbook.getSheet("Employee Info");
 
 		Object[] columnNames = { "Part Name", "Manufacturer", "ID Number", "Room", "Bin", "Quantity" };
-		
-		ctm = new CustomTableModel(getRowData(), columnNames,true);
-		//ctm.setColumnEditable(3, true);
-		
+
+		ctm = new CustomTableModel(getRowData(), columnNames, true);
+		// ctm.setColumnEditable(3, true);
+
 		JTable fresh_table = new JTable(ctm);
-				
+
 		// Write the workbook in file system
 		FileOutputStream out = new FileOutputStream("database.xlsx");
 		workbook.write(out);
 		out.close();
 
 		return fresh_table;
-		
-		
+
 	}
-	
-	public static void refreshSpreadsheet() throws IOException{
-		
+
+	public static void refreshSpreadsheet() throws IOException {
+
 		File file = new File("database.xlsx");
 		FileInputStream fIP = new FileInputStream("database.xlsx");
 
@@ -235,20 +236,17 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 		// Open the existing sheet
 
 		spreadsheet = workbook.getSheet("Employee Info");
-		
+
 		FileOutputStream out = new FileOutputStream("database.xlsx");
 		workbook.write(out);
 		out.close();
 
-		
-		
 	}
-	
+
 	public static Object[][] getRowData() throws IOException {
 
 		refreshSpreadsheet();
-		
-		
+
 		Object[][] rowData = new Object[spreadsheet.getLastRowNum()][6];
 		int rowCounter;
 		int cellCounter;
@@ -278,11 +276,11 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 					break;
 				}
 				cellCounter++;
-				//System.out.println("	Cell = " + cellCounter);
+				// System.out.println(" Cell = " + cellCounter);
 			}
 
 			rowCounter++;
-			//System.out.println("Row = " + rowCounter);
+			// System.out.println("Row = " + rowCounter);
 		}
 
 		return rowData;
@@ -324,32 +322,83 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 			System.out.println("Back");
 			Inventory.mainmenuframe.setVisible(true);
 			Inventory.searchpartframe.setVisible(false);
+		} else if (buttonPressed.equals(btnEditPart)) {
+
+			if(t.getSelectedRow() != -1){
+				System.out.println("Edit Part");
+				
+
+				try {
+					Object[][] allRows = SearchPartFrame.getRowData();
+
+					Object selected_partName = allRows[t.getSelectedRow()][0];
+					Object selected_manufacturer = allRows[t.getSelectedRow()][1];
+					Object selected_idNumber = allRows[t.getSelectedRow()][2];
+					Object selected_room = allRows[t.getSelectedRow()][3];
+					Object selected_bin = allRows[t.getSelectedRow()][4];
+					Object selected_quantity = allRows[t.getSelectedRow()][5];
+
+					Inventory.editpartframe.textfield_partname.setText(selected_partName.toString());
+					Inventory.editpartframe.comboBox_manufacturer.setSelectedItem(selected_manufacturer);
+					Inventory.editpartframe.comboBox_room.setSelectedItem(selected_room);
+					Inventory.editpartframe.textField_idnumber.setText(selected_idNumber.toString());
+					Inventory.editpartframe.textField_quantity.setText(selected_quantity.toString());
+					
+					Inventory.editpartframe.selected_row = t.getSelectedRow()+1;
+					
+				
+					
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				Inventory.editpartframe.setVisible(true);
+				Inventory.searchpartframe.setVisible(false);
+				
+				try {
+					Inventory.addmanufacturerframe.readManufacturer(false);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
 		}
 
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent me) {
-		// TODO Auto-generated method stub
-		JTableHeader source = (JTableHeader) me.getSource();
 
-		// get index of selected column IN THE VIEW
-		// (Note: this changes if columns are moved by dragging with mouse)
+		if (SwingUtilities.isRightMouseButton(me)) {
 
-		TableColumnModel tcm = source.getColumnModel();
-		int tmp = tcm.getColumnIndexAtX(me.getX());
-		//System.out.println("First idx = " + tmp);
+			System.out.println("Right Click");
 
-		// get index of selected column IN THE MODEL
+		} else if (SwingUtilities.isLeftMouseButton(me)) {
 
-		TableColumn tc = tcm.getColumn(tmp);
-		int idx = tc.getModelIndex();
-		//System.out.println("Second idx= " + idx);
+			// TODO Auto-generated method stub
+			JTableHeader source = (JTableHeader) me.getSource();
 
-		// get the data model, and do the sort
+			// get index of selected column IN THE VIEW
+			// (Note: this changes if columns are moved by dragging with mouse)
 
-		CustomTableModel ctm = (CustomTableModel) (source.getTable().getModel());
-		ctm.sort(idx);
+			TableColumnModel tcm = source.getColumnModel();
+			int tmp = tcm.getColumnIndexAtX(me.getX());
+			// System.out.println("First idx = " + tmp);
+
+			// get index of selected column IN THE MODEL
+
+			TableColumn tc = tcm.getColumn(tmp);
+			int idx = tc.getModelIndex();
+			// System.out.println("Second idx= " + idx);
+
+			// get the data model, and do the sort
+
+			CustomTableModel ctm = (CustomTableModel) (source.getTable().getModel());
+			ctm.sort(idx);
+		}
+
 	}
 
 	@Override
@@ -376,5 +425,3 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 
 	}
 }
-
-

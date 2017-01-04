@@ -267,14 +267,19 @@ public class AddManufacturerFrame extends JFrame implements ActionListener, Mous
 
 	}
 
-	public void readManufacturer() throws IOException {
+	public void readManufacturer(boolean isAddPartFrame) throws IOException {
 
 		refreshSpreadsheet();
 
 		Object[][] rowData = AddManufacturerFrame.getRowData();
 
 		for (int i = 0; i < rowData.length; i++) {
-			Inventory.addpartframe.comboBox_manufacturer.addItem(rowData[i][0]);
+			if (isAddPartFrame) {
+				Inventory.addpartframe.comboBox_manufacturer.addItem(rowData[i][0]);
+			} else {
+				Inventory.editpartframe.comboBox_manufacturer.addItem(rowData[i][0]);
+			}
+
 		}
 
 		readExcel();

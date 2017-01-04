@@ -133,7 +133,7 @@ public class MainMenuFrame extends JFrame implements ActionListener {
 		} else if (buttonPressed.equals(btnNewButton)) {
 			System.out.println("Add a Part");
 			try {
-				Inventory.addmanufacturerframe.readManufacturer();
+				Inventory.addmanufacturerframe.readManufacturer(true);
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

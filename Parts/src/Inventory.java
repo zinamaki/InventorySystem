@@ -48,10 +48,11 @@ public class Inventory {
 		editpartframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		editpartframe.setTitle("Edit Part");
 		editpartframe.pack();
+		editpartframe.setSize(900, 800);
 		editpartframe.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		editpartframe.setLocation(dim.width / 2 - mainmenuframe.getSize().width / 2,
 				dim.height / 2 - mainmenuframe.getSize().height / 2);
-		editpartframe.setSize(900, 800);
+		
 		editpartframe.setVisible(false);
 
 		searchpartframe = new SearchPartFrame();
