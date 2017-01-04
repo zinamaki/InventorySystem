@@ -169,6 +169,8 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 		btnEditPart = new JButton("Edit Part");
 		btnEditPart.setBounds(1337, 495, 89, 23);
 		btnEditPart.addActionListener(this);
+		btnEditPart.setBackground(accent);
+		btnEditPart.setForeground(button_text);
 		contentPane.add(btnEditPart);
 
 	}
@@ -343,6 +345,8 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 					Inventory.editpartframe.comboBox_room.setSelectedItem(selected_room);
 					Inventory.editpartframe.textField_idnumber.setText(selected_idNumber.toString());
 					Inventory.editpartframe.textField_quantity.setText(selected_quantity.toString());
+					
+					Inventory.editpartframe.textField_binroom.setText(selected_bin.toString());
 					
 					Inventory.editpartframe.selected_row = t.getSelectedRow()+1;
 					

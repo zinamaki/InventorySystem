@@ -34,7 +34,6 @@ public class EditPartFrame extends JFrame implements ActionListener {
 	public static JTextField textField_idnumber;
 	public static JTextField textField_quantity;
 	public static JTextField textField_binroom;
-	public static JTextField textField_binid;
 	public static JComboBox comboBox_room;
 	public static JComboBox comboBox_manufacturer;
 
@@ -144,7 +143,7 @@ public class EditPartFrame extends JFrame implements ActionListener {
 		btnSubmit.addActionListener(this);
 
 		textField_binroom = new JTextField();
-		textField_binroom.setBounds(352, 422, 86, 40);
+		textField_binroom.setBounds(352, 422, 249, 40);
 		textField_binroom.setColumns(10);
 		contentPane.setBackground(new Color(236, 240, 241));
 		contentPane.setForeground(new Color(52, 152, 219));
@@ -162,16 +161,6 @@ public class EditPartFrame extends JFrame implements ActionListener {
 		contentPane.add(textField_idnumber);
 		contentPane.add(textfield_partname);
 		contentPane.add(comboBox_room);
-
-		JLabel label = new JLabel("-");
-		label.setFont(new Font("Tahoma", Font.PLAIN, 26));
-		label.setBounds(465, 428, 34, 14);
-		contentPane.add(label);
-		label.setForeground(text);
-		textField_binid = new JTextField();
-		textField_binid.setBounds(515, 422, 86, 40);
-		contentPane.add(textField_binid);
-		textField_binid.setColumns(10);
 		contentPane.setBackground(background);
 
 		btnBack = new JButton("Back");
@@ -276,7 +265,7 @@ public class EditPartFrame extends JFrame implements ActionListener {
 		row_data.add((String) EditPartFrame.comboBox_manufacturer.getSelectedItem());
 		row_data.add(EditPartFrame.textField_idnumber.getText());
 		row_data.add((String) EditPartFrame.comboBox_room.getSelectedItem());
-		row_data.add(EditPartFrame.textField_binroom.getText() + "-" + this.textField_binid.getText());
+		row_data.add(EditPartFrame.textField_binroom.getText());
 		row_data.add(EditPartFrame.textField_quantity.getText());
 
 		for (int i = 0; i < 6; i++) {
@@ -319,7 +308,7 @@ public class EditPartFrame extends JFrame implements ActionListener {
 		row_data.add((String) EditPartFrame.comboBox_manufacturer.getSelectedItem());
 		row_data.add(EditPartFrame.textField_idnumber.getText());
 		row_data.add((String) EditPartFrame.comboBox_room.getSelectedItem());
-		row_data.add(EditPartFrame.textField_binroom.getText() + "-" + EditPartFrame.textField_binid.getText());
+		row_data.add(EditPartFrame.textField_binroom.getText());
 		row_data.add(EditPartFrame.textField_quantity.getText());
 
 		for (int i = 0; i < 6; i++) {

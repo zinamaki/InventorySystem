@@ -364,16 +364,12 @@ public class AddManufacturerFrame extends JFrame implements ActionListener, Mous
 
 			try {
 				writeExcel();
+				readExcel();
 			} catch (Exception e2) {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
-			try {
-				readExcel();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			
 			ctm.refresh();
 		} else if (buttonPressed.equals(btnBack)) {
 			System.out.println("Back");
