@@ -42,11 +42,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 
-public class SearchPartFrame extends JFrame implements ActionListener, MouseListener {
+public class AddManufacturerFrame extends JFrame implements ActionListener, MouseListener {
 
 	private JPanel contentPane;
-	public static JTextField textfield_partname;
-	public static JComboBox comboBox_cat;
+	public static JTextField textfield_manufacturer;
 	private JButton btnBack;
 	private JButton btnSearch;
 
@@ -57,8 +56,8 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 	static XSSFRow row;
 
 	static CustomTableModel ctm;
-	static JTable t; 
-	
+	static JTable t;
+
 	Color background = new Color(54, 54, 54);
 	Color text = new Color(232, 23, 93);
 	Color accent = new Color(168, 167, 168);
@@ -88,36 +87,26 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 	 * 
 	 * @throws IOException
 	 */
-	public SearchPartFrame() throws IOException {
+	public AddManufacturerFrame() throws IOException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 888, 788);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
-		JLabel lblAddPart = new JLabel("Search Part");
-		lblAddPart.setBounds(139, 43, 262, 64);
+		JLabel lblAddPart = new JLabel("Add Manufacturer");
+		lblAddPart.setBounds(139, 43, 406, 64);
 		lblAddPart.setFont(new Font("Corbel", Font.PLAIN, 50));
 		lblAddPart.setForeground(text);
 
-		textfield_partname = new JTextField();
-		textfield_partname.setBounds(268, 137, 249, 20);
-		textfield_partname.setColumns(10);
-
-		comboBox_cat = new JComboBox();
-		comboBox_cat.setBounds(129, 137, 126, 20);
-
-		comboBox_cat.addItem("Part Name");
-		comboBox_cat.addItem("Manufacturer");
-		comboBox_cat.addItem("ID Number");
-		comboBox_cat.addItem("Room");
-		comboBox_cat.addItem("Bin");
+		textfield_manufacturer = new JTextField();
+		textfield_manufacturer.setBounds(139, 137, 249, 20);
+		textfield_manufacturer.setColumns(10);
 		contentPane.setBackground(new Color(236, 240, 241));
 		contentPane.setForeground(new Color(52, 152, 219));
 		contentPane.setLayout(null);
 		contentPane.add(lblAddPart);
-		contentPane.add(textfield_partname);
-		contentPane.add(comboBox_cat);
+		contentPane.add(textfield_manufacturer);
 		contentPane.setBackground(background);
 
 		btnBack = new JButton("Back");
@@ -127,25 +116,23 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 		btnBack.addActionListener(this);
 		contentPane.add(btnBack);
 
-		JLabel lblSearchBy = new JLabel("Search by: ");
+		JLabel lblSearchBy = new JLabel("Manufacturer:");
 		lblSearchBy.setForeground(new Color(232, 23, 93));
 		lblSearchBy.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblSearchBy.setBounds(35, 137, 86, 17);
 		contentPane.add(lblSearchBy);
 
-		btnSearch = new JButton("Search");
+		btnSearch = new JButton("Add Manufacturer");
 		btnSearch.addActionListener(this);
 		btnSearch.setForeground(new Color(71, 71, 71));
 		btnSearch.setBackground(new Color(168, 167, 168));
-		btnSearch.setBounds(527, 137, 147, 21);
+		btnSearch.setBounds(410, 137, 147, 21);
 		contentPane.add(btnSearch);
 
 		setupTable();
-		
-		
-		
+
 		t = setupTable();
-		
+
 		t.setPreferredScrollableViewportSize(new Dimension(300, 100));
 
 		// The following lines set the default editor and renderer for
@@ -166,23 +153,20 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 
 		contentPane.add(sp);
 
-		
 	}
 
-	public static void refreshTable() throws IOException{
-		
-	
-		
-		//Object[] columnNames = { "Part Name", "Manufacturer", "ID Number", "Room", "Bin", "Quantity" };
-		
+	public static void refreshTable() throws IOException {
+
+		// Object[] columnNames = { "Part Name", "Manufacturer", "ID Number",
+		// "Room", "Bin", "Quantity" };
+
 		CustomTableModel model = (CustomTableModel) t.getModel();
 		model.refresh();
 		t.setModel(model);
 
 	}
-	
-	
-	public static JTable setupTable() throws IOException{
+
+	public static JTable setupTable() throws IOException {
 		File file = new File("database.xlsx");
 		FileInputStream fIP = new FileInputStream("database.xlsx");
 
@@ -198,27 +182,26 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 
 		// Open the existing sheet
 
-		spreadsheet = workbook.getSheet("Employee Info");
+		spreadsheet = workbook.getSheet("Manufacturer");
 
-		Object[] columnNames = { "Part Name", "Manufacturer", "ID Number", "Room", "Bin", "Quantity" };
-		
-		ctm = new CustomTableModel(getRowData(), columnNames,true);
-		//ctm.setColumnEditable(3, true);
-		
+		Object[] columnNames = { "Manufacturer" };
+
+		ctm = new CustomTableModel(getRowData(), columnNames, false);
+		// ctm.setColumnEditable(3, true);
+
 		JTable fresh_table = new JTable(ctm);
-				
+
 		// Write the workbook in file system
 		FileOutputStream out = new FileOutputStream("database.xlsx");
 		workbook.write(out);
 		out.close();
 
 		return fresh_table;
-		
-		
+
 	}
-	
-	public static void refreshSpreadsheet() throws IOException{
-		
+
+	public void writeExcel() throws Exception {
+
 		File file = new File("database.xlsx");
 		FileInputStream fIP = new FileInputStream("database.xlsx");
 
@@ -234,22 +217,75 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 
 		// Open the existing sheet
 
-		spreadsheet = workbook.getSheet("Employee Info");
-		
+		spreadsheet = workbook.getSheet("Manufacturer");
+
+		row = spreadsheet.createRow(spreadsheet.getLastRowNum() + 1);
+
+		// Get part data from textfields
+
+		// ArrayList<String> row_data = new ArrayList<String>();
+
+		// row_data.add(AddManufacturerFrame.textfield_manufacturer.getText());
+
+		// for (int i = 0; i < 6; i++) {
+		// cell = row.createCell(i);
+		// cell.setCellValue(row_data.get(i));
+		// }
+
+		cell = row.createCell(0);
+		cell.setCellValue(AddManufacturerFrame.textfield_manufacturer.getText());
+
+		// Write the workbook in file system
 		FileOutputStream out = new FileOutputStream("database.xlsx");
 		workbook.write(out);
 		out.close();
 
-		
-		
 	}
-	
+
+	public static void refreshSpreadsheet() throws IOException {
+
+		File file = new File("database.xlsx");
+		FileInputStream fIP = new FileInputStream("database.xlsx");
+
+		// Get the workbook instance for XLSX file
+
+		XSSFWorkbook workbook = new XSSFWorkbook(fIP);
+
+		if (file.isFile() && file.exists()) {
+			System.out.println("openworkbook.xlsx file open successfully.");
+		} else {
+			System.out.println("Error to open openworkbook.xlsx file.");
+		}
+
+		// Open the existing sheet
+
+		spreadsheet = workbook.getSheet("Manufacturer");
+
+		FileOutputStream out = new FileOutputStream("database.xlsx");
+		workbook.write(out);
+		out.close();
+
+	}
+
+	public void readManufacturer() throws IOException {
+
+		refreshSpreadsheet();
+
+		Object[][] rowData = AddManufacturerFrame.getRowData();
+
+		for (int i = 0; i < rowData.length; i++) {
+			Inventory.addpartframe.comboBox_manufacturer.addItem(rowData[i][0]);
+		}
+
+		readExcel();
+
+	}
+
 	public static Object[][] getRowData() throws IOException {
 
 		refreshSpreadsheet();
-		
-		
-		Object[][] rowData = new Object[spreadsheet.getLastRowNum()][6];
+
+		Object[][] rowData = new Object[spreadsheet.getLastRowNum()][1];
 		int rowCounter;
 		int cellCounter;
 
@@ -278,11 +314,11 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 					break;
 				}
 				cellCounter++;
-				//System.out.println("	Cell = " + cellCounter);
+				// System.out.println(" Cell = " + cellCounter);
 			}
 
 			rowCounter++;
-			//System.out.println("Row = " + rowCounter);
+			// System.out.println("Row = " + rowCounter);
 		}
 
 		return rowData;
@@ -319,7 +355,25 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 		JButton buttonPressed = (JButton) e.getSource();
 
 		if (buttonPressed.equals(btnSearch)) {
-			System.out.println("Searching");
+			System.out.println("Adding Manufacturer");
+
+			try {
+				writeExcel();
+			} catch (Exception e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			try {
+				readExcel();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			ctm.refresh();
+		} else if (buttonPressed.equals(btnBack)) {
+			System.out.println("Back");
+			Inventory.mainmenuframe.setVisible(true);
+			Inventory.searchpartframe.setVisible(false);
 		} else if (buttonPressed.equals(btnBack)) {
 			System.out.println("Back");
 			Inventory.mainmenuframe.setVisible(true);
@@ -338,13 +392,13 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 
 		TableColumnModel tcm = source.getColumnModel();
 		int tmp = tcm.getColumnIndexAtX(me.getX());
-		//System.out.println("First idx = " + tmp);
+		// System.out.println("First idx = " + tmp);
 
 		// get index of selected column IN THE MODEL
 
 		TableColumn tc = tcm.getColumn(tmp);
 		int idx = tc.getModelIndex();
-		//System.out.println("Second idx= " + idx);
+		// System.out.println("Second idx= " + idx);
 
 		// get the data model, and do the sort
 
@@ -376,5 +430,3 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 
 	}
 }
-
-

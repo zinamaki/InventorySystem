@@ -31,28 +31,27 @@ public class AddPartFrame extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	public static JTextField textfield_partname;
-	public static JTextField textField_manufacturer;
 	public static JTextField textField_idnumber;
 	public static JTextField textField_quantity;
 	public static JTextField textField_binroom;
 	public static JTextField textField_binid;
 	public static JComboBox comboBox_room;
+	public static JComboBox comboBox_manufacturer;
 
 	private JButton btnSubmit;
 	private JButton btnBack;
-	
+
 	FileInputStream fIP;
 	XSSFSheet spreadsheet;
 	Cell cell;
 	// Create row object
 	XSSFRow row;
 
-	Color background = new Color(54,54,54);
-	Color text = new Color(232,23,93);
-	Color accent = new Color(168,167,168);
-	Color button_text = new Color(71,71,71);
-	
-	
+	Color background = new Color(54, 54, 54);
+	Color text = new Color(232, 23, 93);
+	Color accent = new Color(168, 167, 168);
+	Color button_text = new Color(71, 71, 71);
+
 	/**
 	 * Launch the application.
 	 */
@@ -80,8 +79,8 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 
 		JLabel lblAddPart = new JLabel("Add Part");
-		lblAddPart.setBounds(139, 43, 200, 64);
-		lblAddPart.setFont(new Font("Corbel", Font.PLAIN, 50));
+		lblAddPart.setBounds(139, 43, 377, 102);
+		lblAddPart.setFont(new Font("Corbel", Font.PLAIN, 80));
 		lblAddPart.setForeground(text);
 
 		JLabel lblPartName = new JLabel("Part Name:");
@@ -103,24 +102,20 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		lblRoom.setBounds(77, 373, 42, 17);
 		lblRoom.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblRoom.setForeground(text);
-		
+
 		JLabel lblBin = new JLabel("Bin:");
 		lblBin.setBounds(77, 422, 23, 17);
 		lblBin.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblBin.setForeground(text);
-		
+
 		JLabel lblQuantity = new JLabel("Quantity:");
 		lblQuantity.setBounds(77, 473, 58, 17);
 		lblQuantity.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblQuantity.setForeground(text);
-		
+
 		textfield_partname = new JTextField();
 		textfield_partname.setBounds(214, 201, 249, 20);
 		textfield_partname.setColumns(10);
-
-		textField_manufacturer = new JTextField();
-		textField_manufacturer.setBounds(214, 260, 249, 20);
-		textField_manufacturer.setColumns(10);
 
 		textField_idnumber = new JTextField();
 		textField_idnumber.setBounds(214, 320, 249, 20);
@@ -162,7 +157,6 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		contentPane.add(textField_binroom);
 		contentPane.add(textField_quantity);
 		contentPane.add(textField_idnumber);
-		contentPane.add(textField_manufacturer);
 		contentPane.add(textfield_partname);
 		contentPane.add(comboBox_room);
 
@@ -176,13 +170,17 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		contentPane.add(textField_binid);
 		textField_binid.setColumns(10);
 		contentPane.setBackground(background);
-		
+
 		btnBack = new JButton("Back");
 		btnBack.setBounds(35, 43, 69, 50);
 		btnBack.setBackground(accent);
 		btnBack.setForeground(button_text);
 		btnBack.addActionListener(this);
 		contentPane.add(btnBack);
+
+		comboBox_manufacturer = new JComboBox();
+		comboBox_manufacturer.setBounds(214, 260, 249, 20);
+		contentPane.add(comboBox_manufacturer);
 
 	}
 
@@ -264,7 +262,7 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		ArrayList<String> row_data = new ArrayList<String>();
 
 		row_data.add(AddPartFrame.textfield_partname.getText());
-		row_data.add(AddPartFrame.textField_manufacturer.getText());
+		row_data.add((String) AddPartFrame.comboBox_manufacturer.getSelectedItem());
 		row_data.add(AddPartFrame.textField_idnumber.getText());
 		row_data.add((String) AddPartFrame.comboBox_room.getSelectedItem());
 		row_data.add(AddPartFrame.textField_binroom.getText() + "-" + this.textField_binid.getText());
@@ -280,28 +278,26 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		workbook.write(out);
 		out.close();
 
-		
-
 	}
 
-	public void resetPage(){
+	public void resetPage() {
 		textfield_partname.setText("");
-		textField_manufacturer.setText("");
+		comboBox_manufacturer.setSelectedIndex(0);
 		textField_idnumber.setText("");
 		comboBox_room.setSelectedItem("Mezzanine");
 		textField_binroom.setText("");
 		textField_binid.setText("");
 		textField_quantity.setText("");
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		// when the submit button is pressed do this action
-		
+
 		JButton buttonPressed = (JButton) e.getSource();
 
-		if (buttonPressed.equals(btnSubmit)){
+		if (buttonPressed.equals(btnSubmit)) {
 			try {
 				writeExcel();
 				readExcel();
@@ -310,12 +306,11 @@ public class AddPartFrame extends JFrame implements ActionListener {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		}else if(buttonPressed.equals(btnBack)){
+		} else if (buttonPressed.equals(btnBack)) {
 			System.out.println("Back");
 			Inventory.mainmenuframe.setVisible(true);
 			Inventory.addpartframe.setVisible(false);
 		}
-		
 
 	}
 }
