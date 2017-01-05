@@ -136,6 +136,8 @@ public class EditPartFrame extends JFrame implements ActionListener {
 		textField_quantity.setBounds(352, 479, 249, 30);
 		textField_quantity.setColumns(10);
 
+		textField_quantity.setDocument(new IntegerDocument());
+		
 		btnSubmit = new JButton("Save Changes");
 		btnSubmit.setBounds(139, 546, 200, 36);
 		btnSubmit.setBackground(accent);
