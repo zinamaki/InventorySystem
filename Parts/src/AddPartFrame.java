@@ -274,15 +274,22 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		JButton buttonPressed = (JButton) e.getSource();
 
 		if (buttonPressed.equals(btnSubmit)) {
-			try {
-				writeExcel();
-				readExcel();
-				resetPage();
-				
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			
+			if(textfield_partname.getText().equals("") || textField_idnumber.getText().equals("")){
+				System.out.println("Hey you need to fill in the description and identification");
+			}else{
+				try {
+					writeExcel();
+					readExcel();
+					resetPage();
+					
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
+			
+		
 		} else if (buttonPressed.equals(btnBack)) {
 			System.out.println("Back");
 			comboBox_manufacturer.removeAllItems();

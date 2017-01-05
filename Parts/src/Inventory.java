@@ -57,7 +57,7 @@ public class Inventory {
 
 		searchpartframe = new SearchPartFrame();
 		searchpartframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		searchpartframe.setTitle("Edit Part");
+		searchpartframe.setTitle("Search Part");
 		searchpartframe.pack();
 		searchpartframe.setSize(900, 800);
 		searchpartframe.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -68,7 +68,7 @@ public class Inventory {
 
 		addmanufacturerframe = new AddManufacturerFrame();
 		addmanufacturerframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		addmanufacturerframe.setTitle("Edit Part");
+		addmanufacturerframe.setTitle("Add Manufacturer");
 		addmanufacturerframe.pack();
 		addmanufacturerframe.setSize(900, 800);
 		addmanufacturerframe.setExtendedState(JFrame.MAXIMIZED_BOTH);
