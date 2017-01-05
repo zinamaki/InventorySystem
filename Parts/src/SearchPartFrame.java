@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -26,6 +27,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
@@ -33,6 +36,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -147,7 +152,22 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 		t = setupTable();
 
 		t.setPreferredScrollableViewportSize(new Dimension(300, 100));
-
+		t.setAutoCreateRowSorter(true);
+		
+		
+		TableRowSorter<TableModel> sorter = new TableRowSorter<>(t.getModel());
+		t.setRowSorter(sorter);
+		List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
+		 
+		int columnIndexToSort = 0;
+		sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING));
+		 
+		sorter.setSortKeys(sortKeys);
+		sorter.sort();
+		
+		
+		
+		
 		// The following lines set the default editor and renderer for
 		// any column containing Currency objects.
 
@@ -374,7 +394,7 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 
 	@Override
 	public void mouseClicked(MouseEvent me) {
-
+/*
 		if (SwingUtilities.isRightMouseButton(me)) {
 
 			System.out.println("Right Click");
@@ -402,7 +422,7 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 			CustomTableModel ctm = (CustomTableModel) (source.getTable().getModel());
 			ctm.sort(idx);
 		}
-
+*/
 	}
 
 	@Override

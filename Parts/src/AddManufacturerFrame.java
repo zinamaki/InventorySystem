@@ -135,6 +135,8 @@ public class AddManufacturerFrame extends JFrame implements ActionListener, Mous
 
 		t.setPreferredScrollableViewportSize(new Dimension(300, 100));
 
+		t.setAutoCreateRowSorter(true);
+		
 		// The following lines set the default editor and renderer for
 		// any column containing Currency objects.
 

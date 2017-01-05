@@ -50,6 +50,7 @@ public class AddPartFrame extends JFrame implements ActionListener {
 	Color text = new Color(232, 23, 93);
 	Color accent = new Color(168, 167, 168);
 	Color button_text = new Color(71, 71, 71);
+	private JTextField textField_equipment;
 
 	/**
 	 * Launch the application.
@@ -103,12 +104,12 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		lblRoom.setForeground(text);
 
 		JLabel lblBin = new JLabel("Bin:");
-		lblBin.setBounds(77, 422, 200, 40);
+		lblBin.setBounds(77, 473, 200, 40);
 		lblBin.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblBin.setForeground(text);
 
 		JLabel lblQuantity = new JLabel("Quantity:");
-		lblQuantity.setBounds(77, 473, 200, 36);
+		lblQuantity.setBounds(77, 524, 200, 36);
 		lblQuantity.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblQuantity.setForeground(text);
 
@@ -130,20 +131,20 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		comboBox_room.addItem("Plant");
 
 		textField_quantity = new JTextField();
-		textField_quantity.setBounds(352, 473, 249, 36);
+		textField_quantity.setBounds(352, 524, 249, 36);
 		textField_quantity.setColumns(10);
 
 		textField_quantity.setDocument(new IntegerDocument());
 		
 		
 		btnSubmit = new JButton("Submit");
-		btnSubmit.setBounds(139, 546, 200, 36);
+		btnSubmit.setBounds(202, 586, 200, 36);
 		btnSubmit.setBackground(accent);
 		btnSubmit.setForeground(button_text);
 		btnSubmit.addActionListener(this);
 
 		textField_binroom = new JTextField();
-		textField_binroom.setBounds(352, 422, 249, 40);
+		textField_binroom.setBounds(352, 473, 249, 40);
 		textField_binroom.setColumns(10);
 		contentPane.setBackground(new Color(236, 240, 241));
 		contentPane.setForeground(new Color(52, 152, 219));
@@ -173,6 +174,17 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		comboBox_manufacturer = new JComboBox();
 		comboBox_manufacturer.setBounds(352, 260, 249, 36);
 		contentPane.add(comboBox_manufacturer);
+		
+		JLabel lblEquipment = new JLabel("Equipment:");
+		lblEquipment.setForeground(new Color(232, 23, 93));
+		lblEquipment.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		lblEquipment.setBounds(77, 422, 200, 40);
+		contentPane.add(lblEquipment);
+		
+		textField_equipment = new JTextField();
+		textField_equipment.setColumns(10);
+		textField_equipment.setBounds(352, 422, 249, 40);
+		contentPane.add(textField_equipment);
 
 	}
 
