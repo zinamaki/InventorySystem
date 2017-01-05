@@ -82,7 +82,7 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		lblAddPart.setFont(new Font("Corbel", Font.PLAIN, 80));
 		lblAddPart.setForeground(text);
 
-		JLabel lblPartName = new JLabel("Part Name:");
+		JLabel lblPartName = new JLabel("Description:");
 		lblPartName.setBounds(77, 201, 200, 36);
 		lblPartName.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblPartName.setForeground(text);
@@ -92,7 +92,7 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		lblManufacturer.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblManufacturer.setForeground(text);
 
-		JLabel lblIdNumber = new JLabel("ID Number:");
+		JLabel lblIdNumber = new JLabel("Identification:");
 		lblIdNumber.setBounds(77, 320, 200, 42);
 		lblIdNumber.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblIdNumber.setForeground(text);
@@ -133,6 +133,9 @@ public class AddPartFrame extends JFrame implements ActionListener {
 		textField_quantity.setBounds(352, 473, 249, 36);
 		textField_quantity.setColumns(10);
 
+		textField_quantity.setDocument(new IntegerDocument());
+		
+		
 		btnSubmit = new JButton("Submit");
 		btnSubmit.setBounds(139, 546, 200, 36);
 		btnSubmit.setBackground(accent);
@@ -196,34 +199,7 @@ public class AddPartFrame extends JFrame implements ActionListener {
 
 	}
 
-	public void setupExcel() {
 
-		// This data needs to be written (Object[])
-
-		Map<String, Object[]> empinfo = new TreeMap<String, Object[]>();
-
-		empinfo.put("1", new Object[] { "PART NAME", "MANUFACTURER", "ID NUMBER", "ROOM", "BIN", "Quantity" });
-		empinfo.put("2", new Object[] { "tp01", "Gopal", "Technical Manager" });
-		empinfo.put("3", new Object[] { "tp02", "", "Proof Reader" });
-		empinfo.put("4", new Object[] { "tp03", "Masthan", "Technical Writer" });
-		empinfo.put("5", new Object[] { "tp04", "sdfggfgfgf", "Technical Writer" });
-		empinfo.put("6", new Object[] { "tp05", "Krishna", "Technical Writer" });
-
-		// Iterate over data and write to sheet
-
-		Set<String> keyid = empinfo.keySet();
-		int rowid = 0;
-		for (String key : keyid) {
-			row = spreadsheet.createRow(rowid++);
-			Object[] objectArr = empinfo.get(key);
-			int cellid = 0;
-			for (Object obj : objectArr) {
-				Cell cell = row.createCell(cellid++);
-				cell.setCellValue((String) obj);
-			}
-		}
-
-	}
 
 	public void writeExcel() throws Exception {
 
@@ -297,6 +273,7 @@ public class AddPartFrame extends JFrame implements ActionListener {
 			}
 		} else if (buttonPressed.equals(btnBack)) {
 			System.out.println("Back");
+			comboBox_manufacturer.removeAllItems();
 			Inventory.mainmenuframe.setVisible(true);
 			Inventory.addpartframe.setVisible(false);
 		}

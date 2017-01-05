@@ -38,7 +38,7 @@ public class EditPartFrame extends JFrame implements ActionListener {
 	public static JComboBox comboBox_manufacturer;
 
 	public static int selected_row;
-	
+
 	private JButton btnSubmit;
 	private JButton btnBack;
 
@@ -85,7 +85,7 @@ public class EditPartFrame extends JFrame implements ActionListener {
 		lblAddPart.setFont(new Font("Corbel", Font.PLAIN, 80));
 		lblAddPart.setForeground(text);
 
-		JLabel lblPartName = new JLabel("Part Name:");
+		JLabel lblPartName = new JLabel("Description:");
 		lblPartName.setBounds(77, 201, 200, 36);
 		lblPartName.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblPartName.setForeground(text);
@@ -95,7 +95,7 @@ public class EditPartFrame extends JFrame implements ActionListener {
 		lblManufacturer.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblManufacturer.setForeground(text);
 
-		JLabel lblIdNumber = new JLabel("ID Number:");
+		JLabel lblIdNumber = new JLabel("Identification:");
 		lblIdNumber.setBounds(77, 320, 200, 42);
 		lblIdNumber.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblIdNumber.setForeground(text);
@@ -173,7 +173,7 @@ public class EditPartFrame extends JFrame implements ActionListener {
 		comboBox_manufacturer = new JComboBox();
 		comboBox_manufacturer.setBounds(352, 260, 249, 36);
 		contentPane.add(comboBox_manufacturer);
-		
+
 		btnDeletePart = new JButton("Delete Part");
 		btnDeletePart.setForeground(new Color(71, 71, 71));
 		btnDeletePart.setBackground(new Color(168, 167, 168));
@@ -206,35 +206,6 @@ public class EditPartFrame extends JFrame implements ActionListener {
 
 	}
 
-	public void setupExcel() {
-
-		// This data needs to be written (Object[])
-
-		Map<String, Object[]> empinfo = new TreeMap<String, Object[]>();
-
-		empinfo.put("1", new Object[] { "PART NAME", "MANUFACTURER", "ID NUMBER", "ROOM", "BIN", "Quantity" });
-		empinfo.put("2", new Object[] { "tp01", "Gopal", "Technical Manager" });
-		empinfo.put("3", new Object[] { "tp02", "", "Proof Reader" });
-		empinfo.put("4", new Object[] { "tp03", "Masthan", "Technical Writer" });
-		empinfo.put("5", new Object[] { "tp04", "sdfggfgfgf", "Technical Writer" });
-		empinfo.put("6", new Object[] { "tp05", "Krishna", "Technical Writer" });
-
-		// Iterate over data and write to sheet
-
-		Set<String> keyid = empinfo.keySet();
-		int rowid = 0;
-		for (String key : keyid) {
-			row = spreadsheet.createRow(rowid++);
-			Object[] objectArr = empinfo.get(key);
-			int cellid = 0;
-			for (Object obj : objectArr) {
-				Cell cell = row.createCell(cellid++);
-				cell.setCellValue((String) obj);
-			}
-		}
-
-	}
-
 	public void writeExcel() throws Exception {
 
 		File file = new File("database.xlsx");
@@ -254,7 +225,6 @@ public class EditPartFrame extends JFrame implements ActionListener {
 
 		spreadsheet = workbook.getSheet("Employee Info");
 
-		
 		row = spreadsheet.createRow(selected_row);
 
 		// Get part data from textfields
@@ -279,6 +249,7 @@ public class EditPartFrame extends JFrame implements ActionListener {
 		out.close();
 
 	}
+
 	public void editExcel() throws Exception {
 
 		File file = new File("database.xlsx");
@@ -312,8 +283,7 @@ public class EditPartFrame extends JFrame implements ActionListener {
 		row_data.add(EditPartFrame.textField_quantity.getText());
 
 		for (int i = 0; i < 6; i++) {
-			
-			
+
 			cell = row.getCell(i);
 			cell.setCellValue(row_data.get(i));
 		}
@@ -346,18 +316,15 @@ public class EditPartFrame extends JFrame implements ActionListener {
 
 		row = spreadsheet.getRow(selected_row);
 
-		
-		 int lastRowNum=spreadsheet.getLastRowNum();
-		 
-		    if(selected_row >=0&& selected_row <lastRowNum){
-		    	spreadsheet.shiftRows(selected_row+1,lastRowNum, -1);
-		    }
-		    if(selected_row==lastRowNum){
-		       row=spreadsheet.getRow(selected_row);
-		        if(row!=null){
-		        	spreadsheet.removeRow(row);
-		        }
-		    }
+		if (row != null) {
+			spreadsheet.removeRow(row);
+		}
+
+		int lastRowNum = spreadsheet.getLastRowNum();
+
+		if (selected_row >= 0 && selected_row < lastRowNum) {
+			spreadsheet.shiftRows(selected_row, lastRowNum, -1);
+		}
 
 		// Write the workbook in file system
 		FileOutputStream out = new FileOutputStream("database.xlsx");
@@ -365,7 +332,7 @@ public class EditPartFrame extends JFrame implements ActionListener {
 		out.close();
 
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -377,6 +344,7 @@ public class EditPartFrame extends JFrame implements ActionListener {
 			try {
 				editExcel();
 				readExcel();
+				comboBox_manufacturer.removeAllItems();
 				Inventory.searchpartframe.ctm.refresh();
 				Inventory.searchpartframe.setVisible(true);
 				Inventory.editpartframe.setVisible(false);
@@ -386,20 +354,24 @@ public class EditPartFrame extends JFrame implements ActionListener {
 			}
 		} else if (buttonPressed.equals(btnBack)) {
 			System.out.println("Back");
+			comboBox_manufacturer.removeAllItems();
 			Inventory.searchpartframe.setVisible(true);
 			Inventory.editpartframe.setVisible(false);
-		}else if (buttonPressed.equals(btnDeletePart)) {
+		} else if (buttonPressed.equals(btnDeletePart)) {
 			try {
 				deleteExcel();
 				readExcel();
+
+				comboBox_manufacturer.removeAllItems();
 				Inventory.searchpartframe.ctm.refresh();
+
 				Inventory.searchpartframe.setVisible(true);
 				Inventory.editpartframe.setVisible(false);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		} 
+		}
 
 	}
 }

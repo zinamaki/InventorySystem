@@ -275,8 +275,10 @@ public class AddManufacturerFrame extends JFrame implements ActionListener, Mous
 
 		for (int i = 0; i < rowData.length; i++) {
 			if (isAddPartFrame) {
+				
 				Inventory.addpartframe.comboBox_manufacturer.addItem(rowData[i][0]);
 			} else {
+			
 				Inventory.editpartframe.comboBox_manufacturer.addItem(rowData[i][0]);
 			}
 

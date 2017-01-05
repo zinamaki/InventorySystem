@@ -204,7 +204,7 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 
 		spreadsheet = workbook.getSheet("Employee Info");
 
-		Object[] columnNames = { "Part Name", "Manufacturer", "ID Number", "Room", "Bin", "Quantity" };
+		Object[] columnNames = { "Description", "Manufacturer", "Identification", "Room", "Bin", "Quantity" };
 
 		ctm = new CustomTableModel(getRowData(), columnNames, true);
 		// ctm.setColumnEditable(3, true);
