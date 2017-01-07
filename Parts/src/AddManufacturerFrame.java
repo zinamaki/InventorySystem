@@ -49,22 +49,13 @@ public class AddManufacturerFrame extends JFrame implements ActionListener, Mous
 	private JButton btnBack;
 	private JButton btnSearch;
 
-	FileInputStream fIP;
-	static XSSFSheet spreadsheet;
-	static Cell cell;
-	// Create row object
-	static XSSFRow row;
-
-	static CustomTableModel ctm;
 	static JTable t;
 
 	Color background = new Color(54, 54, 54);
 	Color text = new Color(232, 23, 93);
 	Color accent = new Color(168, 167, 168);
 	Color button_text = new Color(71, 71, 71);
-	private JTable table;
-	private JTable table_1;
-	private JTable table_2;
+
 
 	/**
 	 * Create the frame.
@@ -113,9 +104,7 @@ public class AddManufacturerFrame extends JFrame implements ActionListener, Mous
 		btnSearch.setBounds(410, 137, 147, 21);
 		contentPane.add(btnSearch);
 
-		setupTable();
-
-		t = setupTable();
+		t = Excel.setupManufacturerTable();
 
 		t.setPreferredScrollableViewportSize(new Dimension(300, 100));
 
@@ -141,124 +130,13 @@ public class AddManufacturerFrame extends JFrame implements ActionListener, Mous
 
 	}
 
-	public static void refreshTable() throws IOException {
 
-		// Object[] columnNames = { "Part Name", "Manufacturer", "ID Number",
-		// "Room", "Bin", "Quantity" };
-
-		CustomTableModel model = (CustomTableModel) t.getModel();
-		model.refresh();
-		t.setModel(model);
-
-	}
-
-	public static JTable setupTable() throws IOException {
-		File file = new File("database.xlsx");
-		FileInputStream fIP = new FileInputStream("database.xlsx");
-
-		// Get the workbook instance for XLSX file
-
-		XSSFWorkbook workbook = new XSSFWorkbook(fIP);
-
-		if (file.isFile() && file.exists()) {
-			System.out.println("openworkbook.xlsx file open successfully.");
-		} else {
-			System.out.println("Error to open openworkbook.xlsx file.");
-		}
-
-		// Open the existing sheet
-
-		spreadsheet = workbook.getSheet("Manufacturer");
-
-		Object[] columnNames = { "Manufacturer" };
-
-		ctm = new CustomTableModel(getRowData(), columnNames, false);
-		// ctm.setColumnEditable(3, true);
-
-		JTable fresh_table = new JTable(ctm);
-
-		// Write the workbook in file system
-		FileOutputStream out = new FileOutputStream("database.xlsx");
-		workbook.write(out);
-		out.close();
-
-		return fresh_table;
-
-	}
-
-	public void writeExcel() throws Exception {
-
-		File file = new File("database.xlsx");
-		FileInputStream fIP = new FileInputStream("database.xlsx");
-
-		// Get the workbook instance for XLSX file
-
-		XSSFWorkbook workbook = new XSSFWorkbook(fIP);
-
-		if (file.isFile() && file.exists()) {
-			System.out.println("openworkbook.xlsx file open successfully.");
-		} else {
-			System.out.println("Error to open openworkbook.xlsx file.");
-		}
-
-		// Open the existing sheet
-
-		spreadsheet = workbook.getSheet("Manufacturer");
-
-		row = spreadsheet.createRow(spreadsheet.getLastRowNum() + 1);
-
-		// Get part data from textfields
-
-		// ArrayList<String> row_data = new ArrayList<String>();
-
-		// row_data.add(AddManufacturerFrame.textfield_manufacturer.getText());
-
-		// for (int i = 0; i < 6; i++) {
-		// cell = row.createCell(i);
-		// cell.setCellValue(row_data.get(i));
-		// }
-
-		cell = row.createCell(0);
-		cell.setCellType(Cell.CELL_TYPE_STRING);
-		cell.setCellValue(AddManufacturerFrame.textfield_manufacturer.getText());
-
-		// Write the workbook in file system
-		FileOutputStream out = new FileOutputStream("database.xlsx");
-		workbook.write(out);
-		out.close();
-
-	}
-
-	public static void refreshSpreadsheet() throws IOException {
-
-		File file = new File("database.xlsx");
-		FileInputStream fIP = new FileInputStream("database.xlsx");
-
-		// Get the workbook instance for XLSX file
-
-		XSSFWorkbook workbook = new XSSFWorkbook(fIP);
-
-		if (file.isFile() && file.exists()) {
-			System.out.println("openworkbook.xlsx file open successfully.");
-		} else {
-			System.out.println("Error to open openworkbook.xlsx file.");
-		}
-
-		// Open the existing sheet
-
-		spreadsheet = workbook.getSheet("Manufacturer");
-
-		FileOutputStream out = new FileOutputStream("database.xlsx");
-		workbook.write(out);
-		out.close();
-
-	}
 
 	public void readManufacturer(boolean isAddPartFrame) throws IOException {
 
-		refreshSpreadsheet();
+		Excel.refreshSpreadsheet();
 
-		Object[][] rowData = Inventory.addmanufacturerframe.getRowData();
+		Object[][] rowData = Excel.getManufacturerRowData();
 
 		for (int i = 0; i < rowData.length; i++) {
 			if (isAddPartFrame) {
@@ -275,48 +153,7 @@ public class AddManufacturerFrame extends JFrame implements ActionListener, Mous
 
 	}
 
-	public static Object[][] getRowData() throws IOException {
-
-		refreshSpreadsheet();
-
-		Object[][] rowData = new Object[spreadsheet.getLastRowNum()][1];
-		int rowCounter;
-		int cellCounter;
-
-		// rowData[0][0] = {"Mr.Small"};
-
-		Iterator<Row> rowIterator = spreadsheet.iterator();
-		rowCounter = 0;
-		row = (XSSFRow) rowIterator.next();
-		while (rowIterator.hasNext()) {
-			row = (XSSFRow) rowIterator.next();
-			Iterator<Cell> cellIterator = row.cellIterator();
-
-			cellCounter = 0;
-
-			while (cellIterator.hasNext()) {
-
-				cell = cellIterator.next();
-				switch (cell.getCellType()) {
-				case Cell.CELL_TYPE_NUMERIC:
-					rowData[rowCounter][cellCounter] = cell.getNumericCellValue();
-					// rowData.add("" + cell.getNumericCellValue());
-					break;
-				case Cell.CELL_TYPE_STRING:
-					rowData[rowCounter][cellCounter] = cell.getStringCellValue();
-					// rowData.add(cell.getStringCellValue());
-					break;
-				}
-				cellCounter++;
-				// System.out.println(" Cell = " + cellCounter);
-			}
-
-			rowCounter++;
-			// System.out.println("Row = " + rowCounter);
-		}
-
-		return rowData;
-	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -329,48 +166,25 @@ public class AddManufacturerFrame extends JFrame implements ActionListener, Mous
 			System.out.println("Adding Manufacturer");
 
 			try {
-				writeExcel();
+				Excel.writeManufacturer(textfield_manufacturer.getText());
 				Excel.readExcel();
 			} catch (Exception e2) {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
 			
-			ctm.refresh();
+			Excel.refreshManufacturerTable();
 		} else if (buttonPressed.equals(btnBack)) {
 			System.out.println("Back");
 			Inventory.mainmenuframe.setVisible(true);
 			Inventory.searchpartframe.setVisible(false);
-		} else if (buttonPressed.equals(btnBack)) {
-			System.out.println("Back");
-			Inventory.mainmenuframe.setVisible(true);
-			Inventory.searchpartframe.setVisible(false);
-		}
+		} 
 
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent me) {
 		// TODO Auto-generated method stub
-		JTableHeader source = (JTableHeader) me.getSource();
-
-		// get index of selected column IN THE VIEW
-		// (Note: this changes if columns are moved by dragging with mouse)
-
-		TableColumnModel tcm = source.getColumnModel();
-		int tmp = tcm.getColumnIndexAtX(me.getX());
-		// System.out.println("First idx = " + tmp);
-
-		// get index of selected column IN THE MODEL
-
-		TableColumn tc = tcm.getColumn(tmp);
-		int idx = tc.getModelIndex();
-		// System.out.println("Second idx= " + idx);
-
-		// get the data model, and do the sort
-
-		CustomTableModel ctm = (CustomTableModel) (source.getTable().getModel());
-		ctm.sort(idx);
 	}
 
 	@Override

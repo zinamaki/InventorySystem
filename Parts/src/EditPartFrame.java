@@ -56,21 +56,6 @@ public class EditPartFrame extends JFrame implements ActionListener {
 	private JLabel lblEquipment;
 	private JTextField textField_equipment;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AddPartFrame frame = new AddPartFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.

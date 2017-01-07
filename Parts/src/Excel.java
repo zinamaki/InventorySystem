@@ -23,7 +23,8 @@ public class Excel {
 	private static File file;
 	private static FileInputStream fIP;
 	private static FileOutputStream out;
-	private static CustomTableModel ctm;
+	private static CustomTableModel ctm_search;
+	private static CustomTableModel ctm_manufacturer;
 
 	public static void openSheet() throws IOException {
 		file = new File("database.xlsx");
@@ -32,9 +33,9 @@ public class Excel {
 		// Get the workbook instance for XLSX file
 
 		workbook = new XSSFWorkbook(fIP);
-		
+
 		spreadsheet = workbook.getSheet("Employee Info");
-		
+
 	}
 
 	public static void closeSheet() throws IOException {
@@ -45,6 +46,32 @@ public class Excel {
 		out.close();
 	}
 
+	public static void writeManufacturer(String manufacturer) throws Exception {
+
+		File file = new File("database.xlsx");
+		FileInputStream fIP = new FileInputStream("database.xlsx");
+
+		// Get the workbook instance for XLSX file
+
+		XSSFWorkbook workbook = new XSSFWorkbook(fIP);
+
+		// Open the existing sheet
+
+		XSSFSheet spreadsheet = workbook.getSheet("Manufacturer");
+
+		row = spreadsheet.createRow(spreadsheet.getLastRowNum() + 1);
+
+		cell = row.createCell(0);
+		cell.setCellType(Cell.CELL_TYPE_STRING);
+		cell.setCellValue(manufacturer);
+
+		// Write the workbook in file system
+		FileOutputStream out = new FileOutputStream("database.xlsx");
+		workbook.write(out);
+		out.close();
+
+	}
+	
 	public static void writeExcel(String partname, String manufacturer, String identification, String room, String bin,
 			Integer quantity) throws Exception {
 
@@ -173,49 +200,57 @@ public class Excel {
 
 	public static void refreshSpreadsheet() throws IOException {
 
-		file = new File("database.xlsx");
-		fIP = new FileInputStream("database.xlsx");
-
-		// Get the workbook instance for XLSX file
-
-		workbook = new XSSFWorkbook(fIP);
-		
-		spreadsheet = workbook.getSheet("Employee Info");
-		// Write the workbook in file system
-				out = new FileOutputStream("database.xlsx");
-				workbook.write(out);
-				out.close();
+		openSheet();
+		closeSheet();
 	}
 
 	public static JTable setupSearchTable() throws IOException {
-		file = new File("database.xlsx");
-		fIP = new FileInputStream("database.xlsx");
-
-		// Get the workbook instance for XLSX file
-
-		workbook = new XSSFWorkbook(fIP);
-		
-		spreadsheet = workbook.getSheet("Employee Info");
+		openSheet();
 
 		Object[] columnNames = { "Description", "Manufacturer", "Identification", "Room", "Bin", "Quantity" };
 
-		ctm = new CustomTableModel(getSearchRowData(), columnNames, true);
+		ctm_search = new CustomTableModel(getSearchRowData(), columnNames, true);
 		// ctm.setColumnEditable(3, true);
 
-		JTable fresh_table = new JTable(ctm);
+		JTable fresh_table = new JTable(ctm_search);
 
-		out = new FileOutputStream("database.xlsx");
+		closeSheet();
+		return fresh_table;
+
+	}
+
+	public static JTable setupManufacturerTable() throws IOException {
+		File file = new File("database.xlsx");
+		FileInputStream fIP = new FileInputStream("database.xlsx");
+
+		// Get the workbook instance for XLSX file
+
+		XSSFWorkbook workbook = new XSSFWorkbook(fIP);
+
+		// Open the existing sheet
+
+		XSSFSheet spreadsheet = workbook.getSheet("Manufacturer");
+
+		Object[] columnNames = { "Manufacturer" };
+
+		ctm_manufacturer = new CustomTableModel(getManufacturerRowData(), columnNames, false);
+		// ctm.setColumnEditable(3, true);
+
+		JTable fresh_table = new JTable(ctm_manufacturer);
+
+		// Write the workbook in file system
+		FileOutputStream out = new FileOutputStream("database.xlsx");
 		workbook.write(out);
 		out.close();
 
 		return fresh_table;
 
 	}
-
+	
 	public static Object[][] getSearchRowData() throws IOException {
 
-		//refreshSpreadsheet();
-		
+		// refreshSpreadsheet();
+
 		Object[][] rowData = new Object[spreadsheet.getLastRowNum()][6];
 		int rowCounter;
 		int cellCounter;
@@ -235,26 +270,85 @@ public class Excel {
 				switch (cell.getCellType()) {
 				case Cell.CELL_TYPE_NUMERIC:
 					rowData[rowCounter][cellCounter] = cell.getNumericCellValue();
-					
+
 					break;
 				case Cell.CELL_TYPE_STRING:
 					rowData[rowCounter][cellCounter] = cell.getStringCellValue();
-				
+
 					break;
 				}
 				cellCounter++;
-			
+
 			}
 
 			rowCounter++;
-	
+
 		}
 
 		return rowData;
 	}
-	public static void refreshSearchTable(){
-		ctm.refresh();
+
+	public static Object[][] getManufacturerRowData() throws IOException {
+
+		File file = new File("database.xlsx");
+		FileInputStream fIP = new FileInputStream("database.xlsx");
+
+		// Get the workbook instance for XLSX file
+
+		XSSFWorkbook workbook = new XSSFWorkbook(fIP);
+
+		// Open the existing sheet
+
+		XSSFSheet spreadsheet = workbook.getSheet("Manufacturer");
+
+		Object[][] rowData = new Object[spreadsheet.getLastRowNum()][1];
+		int rowCounter;
+		int cellCounter;
+
+		// rowData[0][0] = {"Mr.Small"};
+
+		Iterator<Row> rowIterator = spreadsheet.iterator();
+		rowCounter = 0;
+		row = (XSSFRow) rowIterator.next();
+		while (rowIterator.hasNext()) {
+			row = (XSSFRow) rowIterator.next();
+			Iterator<Cell> cellIterator = row.cellIterator();
+
+			cellCounter = 0;
+
+			while (cellIterator.hasNext()) {
+
+				cell = cellIterator.next();
+				switch (cell.getCellType()) {
+				case Cell.CELL_TYPE_NUMERIC:
+					rowData[rowCounter][cellCounter] = cell.getNumericCellValue();
+					// rowData.add("" + cell.getNumericCellValue());
+					break;
+				case Cell.CELL_TYPE_STRING:
+					rowData[rowCounter][cellCounter] = cell.getStringCellValue();
+					// rowData.add(cell.getStringCellValue());
+					break;
+				}
+				cellCounter++;
+				// System.out.println(" Cell = " + cellCounter);
+			}
+
+			rowCounter++;
+			// System.out.println("Row = " + rowCounter);
+		}
+
+		return rowData;
 	}
+
+	public static void refreshSearchTable() {
+		ctm_search.refresh();
+	}
+	public static void refreshManufacturerTable(){
+
+		ctm_manufacturer.refresh();
+
+	}
+
 	
 
 }

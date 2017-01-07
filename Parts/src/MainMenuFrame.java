@@ -38,22 +38,6 @@ public class MainMenuFrame extends JFrame implements ActionListener {
 	Color button_text = new Color(71, 71, 71);
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainMenuFrame frame = new MainMenuFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public MainMenuFrame() {

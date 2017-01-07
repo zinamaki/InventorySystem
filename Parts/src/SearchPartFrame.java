@@ -63,25 +63,6 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 	Color text = new Color(232, 23, 93);
 	Color accent = new Color(168, 167, 168);
 	Color button_text = new Color(71, 71, 71);
-	private JTable table;
-	private JTable table_1;
-	private JTable table_2;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					SearchPartFrame frame = new SearchPartFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
