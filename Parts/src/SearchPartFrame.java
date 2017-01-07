@@ -54,7 +54,7 @@ import javax.swing.JTable;
 public class SearchPartFrame extends JFrame implements ActionListener, MouseListener {
 
 	private JPanel contentPane;
-	public static JTextField textfield_partname;
+	public static JTextField textfield_search;
 	public static JComboBox comboBox_cat;
 	private JButton btnBack;
 	private JButton btnSearch;
@@ -84,9 +84,9 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 		lblAddPart.setFont(new Font("Corbel", Font.PLAIN, 50));
 		lblAddPart.setForeground(text);
 
-		textfield_partname = new JTextField();
-		textfield_partname.setBounds(268, 137, 249, 20);
-		textfield_partname.setColumns(10);
+		textfield_search = new JTextField();
+		textfield_search.setBounds(268, 137, 249, 20);
+		textfield_search.setColumns(10);
 
 		comboBox_cat = new JComboBox();
 		comboBox_cat.setBounds(129, 137, 126, 20);
@@ -96,13 +96,12 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 		comboBox_cat.addItem("Identification");
 		comboBox_cat.addItem("Room");
 		comboBox_cat.addItem("Bin");
-		comboBox_cat.addItem("Quantity");
-		
+
 		contentPane.setBackground(new Color(236, 240, 241));
 		contentPane.setForeground(new Color(52, 152, 219));
 		contentPane.setLayout(null);
 		contentPane.add(lblAddPart);
-		contentPane.add(textfield_partname);
+		contentPane.add(textfield_search);
 		contentPane.add(comboBox_cat);
 		contentPane.setBackground(background);
 
@@ -179,6 +178,17 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 
 		if (buttonPressed.equals(btnSearch)) {
 			System.out.println("Searching");
+
+			Integer columntosearch = comboBox_cat.getSelectedIndex();
+
+			String searchquery = textfield_search.getText();
+
+			if (searchquery.equals("")) {
+				Excel.refreshSearchTable();
+			} else {
+				Excel.refreshSearch(columntosearch, searchquery);
+			}
+
 		} else if (buttonPressed.equals(btnBack)) {
 			System.out.println("Back");
 			Inventory.mainmenuframe.setVisible(true);
@@ -205,23 +215,24 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 					Object selected_bin = t.getValueAt(t.getSelectedRow(), 4);
 					Object selected_quantity = t.getValueAt(t.getSelectedRow(), 5);
 
-					String partname =selected_partName.toString();
+					String partname = selected_partName.toString();
 					String manufacturer = selected_manufacturer.toString();
 					String identification = selected_idNumber.toString();
 					String room = selected_room.toString();
 					String bin = selected_bin.toString();
-					Double dquantity =  (double) selected_quantity;
-					Integer quantity = dquantity.intValue();				
-									
-					Inventory.editpartframe.old_data = new Part(partname,manufacturer,identification,room,bin,quantity);
-					
+					Double dquantity = (double) selected_quantity;
+					Integer quantity = dquantity.intValue();
+
+					Inventory.editpartframe.old_data = new Part(partname, manufacturer, identification, room, bin,
+							quantity);
+
 					Inventory.editpartframe.textfield_partname.setText(partname);
 					Inventory.editpartframe.comboBox_manufacturer.setSelectedItem(selected_manufacturer);
 					Inventory.editpartframe.comboBox_room.setSelectedItem(selected_room);
-					Inventory.editpartframe.textField_idnumber.setText(identification);		
-					
+					Inventory.editpartframe.textField_idnumber.setText(identification);
+
 					Inventory.editpartframe.textField_quantity.setText(String.valueOf(quantity));
-									
+
 					Inventory.editpartframe.textField_binroom.setText(selected_bin.toString());
 
 				} catch (IOException e1) {

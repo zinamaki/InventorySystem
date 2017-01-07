@@ -92,5 +92,19 @@ class CustomTableModel extends AbstractTableModel {
 		}
 		fireTableDataChanged();
 	}
+	
+	public void refreshSearch(Integer columntosearch,String searchquery) {
+		try {
+
+			this.rowData = Excel.getRowsMatching(columntosearch,searchquery);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		fireTableDataChanged();
+	}
+	
+	
 
 }

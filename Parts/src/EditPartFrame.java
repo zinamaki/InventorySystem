@@ -197,7 +197,7 @@ public class EditPartFrame extends JFrame implements ActionListener {
 				Part new_data = new Part(partname, manufacturer, identification, room, bin, quantity);
 
 				Excel.editExcel(old_data, new_data);
-				Excel.readExcel();
+			//	Excel.readExcel();
 
 				comboBox_manufacturer.removeAllItems();
 
@@ -230,7 +230,7 @@ public class EditPartFrame extends JFrame implements ActionListener {
 					System.out.println("Yes button clicked");
 					Excel.deleteExcel(old_data);
 
-					Excel.readExcel();
+				//	Excel.readExcel();
 
 					comboBox_manufacturer.removeAllItems();
 					Excel.refreshSearchTable();

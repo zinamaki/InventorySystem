@@ -209,7 +209,7 @@ public class AddPartFrame extends JFrame implements ActionListener {
 				try {
 					
 					Excel.writeExcel(partname,manufacturer,identification,room,bin,quantity);
-					Excel.readExcel();
+					//Excel.readExcel();
 					resetPage();
 					
 				} catch (Exception e1) {

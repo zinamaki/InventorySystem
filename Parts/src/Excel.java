@@ -287,6 +287,38 @@ public class Excel {
 
 	}
 
+	public static Object[][] getRowsMatching(Integer columntosearch, String searchquery) throws IOException {
+
+		ArrayList<Integer> indexes = searchExcel(columntosearch, searchquery);
+
+		System.out.println("Spreadsheet last row number" + spreadsheet.getLastRowNum());
+
+		Object[][] rowData = new Object[indexes.size()][6];
+
+		int rowCounter = 0;
+		
+		for (int i : indexes) {
+			System.out.println(i);
+			
+			row = spreadsheet.getRow(i);
+			int j;
+			for (j = 0; j < 5; j++) {
+
+				cell = row.getCell(j);
+				rowData[rowCounter][j] = cell.getStringCellValue();
+
+			}
+			cell = row.getCell(5);			
+			rowData[rowCounter][5] = cell.getNumericCellValue();
+
+			rowCounter++;
+			
+		}
+
+		return rowData;
+
+	}
+
 	public static Object[][] getSearchRowData() throws IOException {
 
 		// refreshSpreadsheet();
@@ -387,6 +419,40 @@ public class Excel {
 	public static void refreshManufacturerTable() {
 
 		ctm_manufacturer.refresh();
+
+	}
+
+	public static void refreshSearch(Integer columntosearch,String searchquery) {
+		ctm_search.refreshSearch(columntosearch,searchquery);
+	}
+	
+	public static ArrayList<Integer> searchExcel(Integer columntosearch, String searchquery) throws IOException {
+		// TODO Auto-generated method stub
+
+		// search through the column "searchby" and find all results that
+		// contain searchquery and update the search table
+
+		openSheet();
+
+		//int indexOfRow = -1;
+
+		ArrayList<Integer> indexes = new ArrayList<Integer>();
+
+		Iterator<Row> rowIterator = spreadsheet.iterator();
+		while (rowIterator.hasNext()) {
+			row = (XSSFRow) rowIterator.next();
+			//Iterator<Cell> cellIterator = row.cellIterator();
+
+			if (row.getCell(columntosearch).getStringCellValue().contains(searchquery)) {
+				// we have found the correct row, so return its index
+				indexes.add(row.getRowNum());
+				 System.out.println(row.getRowNum());
+			}
+
+		}
+		closeSheet();
+
+		return indexes;
 
 	}
 
