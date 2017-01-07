@@ -96,7 +96,12 @@ class CustomTableModel extends AbstractTableModel {
 	public void refreshSearch(Integer columntosearch,String searchquery) {
 		try {
 
-			this.rowData = Excel.getRowsMatching(columntosearch,searchquery);
+			Object[][] rowData = Excel.getRowsMatching(columntosearch,searchquery);
+			
+			if(rowData != null){
+				this.rowData = rowData;
+			}
+			
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

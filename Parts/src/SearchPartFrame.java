@@ -24,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -185,9 +186,17 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 
 			if (searchquery.equals("")) {
 				Excel.refreshSearchTable();
-			} else {
-				Excel.refreshSearch(columntosearch, searchquery);
-			}
+			} else
+				try {
+					if(Excel.getRowsMatching(columntosearch, searchquery) == null ){
+						JOptionPane.showMessageDialog(this, "No results found!", "Error", JOptionPane.ERROR_MESSAGE);
+					}else{
+						Excel.refreshSearch(columntosearch, searchquery);
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
 		} else if (buttonPressed.equals(btnBack)) {
 			System.out.println("Back");

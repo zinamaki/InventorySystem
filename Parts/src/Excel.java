@@ -291,30 +291,40 @@ public class Excel {
 
 		ArrayList<Integer> indexes = searchExcel(columntosearch, searchquery);
 
+		if(indexes.size() == 0){
+			return null;
+		}
+		
 		System.out.println("Spreadsheet last row number" + spreadsheet.getLastRowNum());
 
 		Object[][] rowData = new Object[indexes.size()][6];
 
 		int rowCounter = 0;
 		
-		for (int i : indexes) {
-			System.out.println(i);
+		if(indexes.size()>0){
+		
+			for (int i : indexes) {
+				System.out.println(i);
+				
+				row = spreadsheet.getRow(i);
+				int j;
+				for (j = 0; j < 5; j++) {
+	
+					cell = row.getCell(j);
+					rowData[rowCounter][j] = cell.getStringCellValue();
+	
+				}
+				cell = row.getCell(5);	
+				
+				if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
+					rowData[rowCounter][5] = cell.getNumericCellValue();
+				}
+				
 			
-			row = spreadsheet.getRow(i);
-			int j;
-			for (j = 0; j < 5; j++) {
-
-				cell = row.getCell(j);
-				rowData[rowCounter][j] = cell.getStringCellValue();
-
+				rowCounter++;
+				
 			}
-			cell = row.getCell(5);			
-			rowData[rowCounter][5] = cell.getNumericCellValue();
-
-			rowCounter++;
-			
 		}
-
 		return rowData;
 
 	}
