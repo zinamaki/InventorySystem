@@ -71,7 +71,7 @@ public class Excel {
 		out.close();
 
 	}
-	
+
 	public static void writeExcel(String partname, String manufacturer, String identification, String room, String bin,
 			Integer quantity) throws Exception {
 
@@ -106,45 +106,94 @@ public class Excel {
 
 	}
 
-	public static void editExcel(String partname, String manufacturer, String identification, String room, String bin,
-			Integer quantity) throws Exception {
+	public static void editExcel(Part old_data, Part new_data) throws Exception {
 
-		openSheet();
+		
 
 		// find the index of the row to be deleted and place in "selected_row"
 
-		int selected_row = 0;
+		int indexOfRow = findMatchingRow(old_data);
+		
+		System.out.println(indexOfRow);
+		
 
-		row = spreadsheet.getRow(selected_row);
+		row = spreadsheet.getRow(indexOfRow+1);
 
-		// Get part data from textfields
+		
+		
+		if (row != null){
+			
+			openSheet();
+			
+			// Get part data from textfields
 
-		ArrayList<String> row_data = new ArrayList<String>();
+			ArrayList<String> row_data = new ArrayList<String>();
 
-		row_data.add(partname);
-		row_data.add(manufacturer);
-		row_data.add(identification);
-		row_data.add(room);
-		row_data.add(bin);
+			row_data.add(new_data.partname);
+			row_data.add(new_data.manufacturer);
+			row_data.add(new_data.identification);
+			row_data.add(new_data.room);
+			row_data.add(new_data.bin);
 
-		// row_data.add(EditPartFrame.textField_quantity.getText());
+			// row_data.add(EditPartFrame.textField_quantity.getText());
 
-		for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < 5; i++) {
 
-			cell = row.getCell(i);
+				cell = row.getCell(i);
 
-			cell.setCellType(Cell.CELL_TYPE_STRING);
-			cell.setCellValue(row_data.get(i));
+				cell.setCellType(Cell.CELL_TYPE_STRING);
+				cell.setCellValue(row_data.get(i));
+
+			}
+
+			cell = row.getCell(5);
+
+			cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+			cell.setCellValue(new_data.quantity);
+
+			closeSheet();
+			
+		}
+		
+		
+	
+
+	}
+
+	public static int findMatchingRow(Part old_data) throws IOException {
+
+		openSheet();
+
+		int indexOfRow = -1;
+
+		Iterator<Row> rowIterator = spreadsheet.iterator();
+		while (rowIterator.hasNext()) {
+			row = (XSSFRow) rowIterator.next();
+			Iterator<Cell> cellIterator = row.cellIterator();
+
+			for (int cellCounter = 0; cellCounter < 6; cellCounter++) {
+
+				if (row.getCell(0).getStringCellValue().equals(old_data.partname) 
+						&& row.getCell(1).getStringCellValue().equals(old_data.manufacturer)
+						&& row.getCell(2).getStringCellValue().equals(old_data.identification)
+						&& row.getCell(3).getStringCellValue().equals(old_data.room)
+						&& row.getCell(4).getStringCellValue().equals(old_data.bin)
+						&& row.getCell(5).getNumericCellValue() == old_data.quantity) {
+					// we have found the correct row, so return its index
+
+					System.out.println("WE HAVE FOUND THE ROW");
+					
+					
+					return row.getRowNum();
+				}
+
+			}
 
 		}
-
-		cell = row.getCell(5);
-
-		cell.setCellType(Cell.CELL_TYPE_NUMERIC);
-		cell.setCellValue(quantity);
-
 		closeSheet();
+		// fIP.close();
 
+		return indexOfRow;
 	}
 
 	public static void deleteExcel(String partname, String manufacturer, String identification, String room, String bin,
@@ -184,14 +233,14 @@ public class Excel {
 				cell = cellIterator.next();
 				switch (cell.getCellType()) {
 				case Cell.CELL_TYPE_NUMERIC:
-					System.out.print(cell.getNumericCellValue() + " \t\t ");
+				//	System.out.print(cell.getNumericCellValue() + " \t\t ");
 					break;
 				case Cell.CELL_TYPE_STRING:
-					System.out.print(cell.getStringCellValue() + " \t\t ");
+				//	System.out.print(cell.getStringCellValue() + " \t\t ");
 					break;
 				}
 			}
-			System.out.println();
+		//	System.out.println();
 		}
 		closeSheet();
 		// fIP.close();
@@ -246,7 +295,7 @@ public class Excel {
 		return fresh_table;
 
 	}
-	
+
 	public static Object[][] getSearchRowData() throws IOException {
 
 		// refreshSpreadsheet();
@@ -343,12 +392,11 @@ public class Excel {
 	public static void refreshSearchTable() {
 		ctm_search.refresh();
 	}
-	public static void refreshManufacturerTable(){
+
+	public static void refreshManufacturerTable() {
 
 		ctm_manufacturer.refresh();
 
 	}
-
-	
 
 }

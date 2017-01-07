@@ -38,6 +38,9 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -200,12 +203,29 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 					Object selected_bin = t.getValueAt(t.getSelectedRow(), 4);
 					Object selected_quantity = t.getValueAt(t.getSelectedRow(), 5);
 
-					Inventory.editpartframe.textfield_partname.setText(selected_partName.toString());
+					String partname =selected_partName.toString();
+					String manufacturer = selected_manufacturer.toString();
+					String identification = selected_idNumber.toString();
+					String room = selected_room.toString();
+					String bin = selected_bin.toString();
+					Double dquantity =  (double) selected_quantity;
+					Integer quantity = dquantity.intValue();				
+									
+					Inventory.editpartframe.old_data = new Part(partname,manufacturer,identification,room,bin,quantity);
+					
+					Inventory.editpartframe.textfield_partname.setText(partname);
 					Inventory.editpartframe.comboBox_manufacturer.setSelectedItem(selected_manufacturer);
 					Inventory.editpartframe.comboBox_room.setSelectedItem(selected_room);
-					Inventory.editpartframe.textField_idnumber.setText(selected_idNumber.toString());
-					Inventory.editpartframe.textField_quantity.setText(selected_quantity.toString());
+					Inventory.editpartframe.textField_idnumber.setText(identification);
+									
+					//Inventory.editpartframe.textField_quantity.setDocument(new IntegerDocument());
+					Inventory.editpartframe.textField_quantity.setText(String.valueOf(quantity));
+					//Inventory.editpartframe.textField_quantity.setDocument(new IntegerDocument());
 
+					
+					
+					
+					
 					Inventory.editpartframe.textField_binroom.setText(selected_bin.toString());
 
 					Inventory.editpartframe.selected_row = t.getSelectedRow() + 1;

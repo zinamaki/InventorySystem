@@ -42,12 +42,8 @@ public class EditPartFrame extends JFrame implements ActionListener {
 	private JButton btnSubmit;
 	private JButton btnBack;
 
-	FileInputStream fIP;
-	XSSFSheet spreadsheet;
-	Cell cell;
-	// Create row object
-	XSSFRow row;
-
+	public static Part old_data;
+	
 	Color background = new Color(54, 54, 54);
 	Color text = new Color(232, 23, 93);
 	Color accent = new Color(168, 167, 168);
@@ -122,7 +118,7 @@ public class EditPartFrame extends JFrame implements ActionListener {
 		textField_quantity = new JTextField();
 		textField_quantity.setBounds(352, 523, 249, 42);
 		textField_quantity.setColumns(10);
-
+		
 		textField_quantity.setDocument(new IntegerDocument());
 		
 		btnSubmit = new JButton("Save Changes");
@@ -197,9 +193,11 @@ public class EditPartFrame extends JFrame implements ActionListener {
 				String identification = textField_idnumber.getText();
 				String room = (String) comboBox_room.getSelectedItem();
 				String bin = textField_binroom.getText();
-				Integer quantity = Integer.parseInt(textField_quantity.getText());
+				Integer quantity = Integer.parseInt(textField_quantity.getText());	
 								
-				Excel.editExcel(partname,manufacturer,identification,room,bin,quantity);
+				Part new_data = new Part(partname,manufacturer,identification,room,bin,quantity);
+				
+				Excel.editExcel(old_data,new_data);
 				Excel.readExcel();
 				
 				comboBox_manufacturer.removeAllItems();
