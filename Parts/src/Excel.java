@@ -115,12 +115,10 @@ public class Excel {
 		System.out.println(indexOfRow);
 
 		if (indexOfRow != -1) {
-			
-			openSheet();
-			
-			row = spreadsheet.getRow(indexOfRow);
 
-			
+			openSheet();
+
+			row = spreadsheet.getRow(indexOfRow);
 
 			// Get part data from textfields
 
@@ -132,14 +130,13 @@ public class Excel {
 			row_data.add(new_data.room);
 			row_data.add(new_data.bin);
 
-			
 			for (int i = 0; i < 5; i++) {
 
 				cell = row.getCell(i);
 
 				cell.setCellType(Cell.CELL_TYPE_STRING);
 				cell.setCellValue(row_data.get(i));
-				
+
 				System.out.println(row_data.get(i));
 
 			}
@@ -188,15 +185,14 @@ public class Excel {
 
 	public static void deleteExcel(Part old_data) throws Exception {
 
-		
-
 		int selected_row = findMatchingRow(old_data);
 
-		if (selected_row != -1){
-			
+		if (selected_row != -1) {
+
 			openSheet();
-			
-			// find the index of the row to be deleted and place in "selected_row"
+
+			// find the index of the row to be deleted and place in
+			// "selected_row"
 
 			row = spreadsheet.getRow(selected_row);
 
@@ -211,10 +207,8 @@ public class Excel {
 			}
 
 			closeSheet();
-			
+
 		}
-		
-	
 
 	}
 
@@ -259,7 +253,7 @@ public class Excel {
 		// ctm.setColumnEditable(3, true);
 
 		JTable fresh_table = new JTable(ctm_search);
-	
+
 		closeSheet();
 		return fresh_table;
 

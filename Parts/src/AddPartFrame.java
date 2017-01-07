@@ -9,6 +9,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -192,6 +193,8 @@ public class AddPartFrame extends JFrame implements ActionListener {
 			
 			if(textfield_partname.getText().equals("") || textField_idnumber.getText().equals("")){
 				System.out.println("Hey you need to fill in the description and identification");
+				JOptionPane.showMessageDialog(this, "You must fill in the description and identification!", "Error", JOptionPane.ERROR_MESSAGE);
+				
 			}else{
 				
 				String partname = textfield_partname.getText();

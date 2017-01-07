@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -41,7 +42,7 @@ public class EditPartFrame extends JFrame implements ActionListener {
 	private JButton btnBack;
 
 	public static Part old_data;
-	
+
 	Color background = new Color(54, 54, 54);
 	Color text = new Color(232, 23, 93);
 	Color accent = new Color(168, 167, 168);
@@ -49,7 +50,6 @@ public class EditPartFrame extends JFrame implements ActionListener {
 	private JButton btnDeletePart;
 	private JLabel lblEquipment;
 	private JTextField textField_equipment;
-
 
 	/**
 	 * Create the frame.
@@ -116,9 +116,9 @@ public class EditPartFrame extends JFrame implements ActionListener {
 		textField_quantity = new JTextField();
 		textField_quantity.setBounds(352, 523, 249, 42);
 		textField_quantity.setColumns(10);
-		
+
 		textField_quantity.setDocument(new IntegerDocument());
-		
+
 		btnSubmit = new JButton("Save Changes");
 		btnSubmit.setBounds(136, 589, 200, 36);
 		btnSubmit.setBackground(accent);
@@ -163,13 +163,13 @@ public class EditPartFrame extends JFrame implements ActionListener {
 		btnDeletePart.setBounds(362, 589, 200, 36);
 		btnDeletePart.addActionListener(this);
 		contentPane.add(btnDeletePart);
-		
+
 		lblEquipment = new JLabel("Equipment:");
 		lblEquipment.setForeground(new Color(232, 23, 93));
 		lblEquipment.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblEquipment.setBounds(77, 421, 200, 40);
 		contentPane.add(lblEquipment);
-		
+
 		textField_equipment = new JTextField();
 		textField_equipment.setColumns(10);
 		textField_equipment.setBounds(352, 422, 249, 40);
@@ -191,44 +191,55 @@ public class EditPartFrame extends JFrame implements ActionListener {
 				String identification = textField_idnumber.getText();
 				String room = (String) comboBox_room.getSelectedItem();
 				String bin = textField_binroom.getText();
-				Integer quantity = Integer.parseInt(textField_quantity.getText());	
-								
-				Part new_data = new Part(partname,manufacturer,identification,room,bin,quantity);
-				
-				Excel.editExcel(old_data,new_data);
+				Integer quantity = Integer.parseInt(textField_quantity.getText());
+
+				Part new_data = new Part(partname, manufacturer, identification, room, bin, quantity);
+
+				Excel.editExcel(old_data, new_data);
 				Excel.readExcel();
-				
+
 				comboBox_manufacturer.removeAllItems();
-				
+
 				Excel.refreshSearchTable();
-				
+
 				Inventory.searchpartframe.setVisible(true);
 				Inventory.editpartframe.setVisible(false);
-			
+
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		} else if (buttonPressed.equals(btnBack)) {
-			
+
 			System.out.println("Back");
-			
+
 			comboBox_manufacturer.removeAllItems();
-			
+
 			Inventory.searchpartframe.setVisible(true);
 			Inventory.editpartframe.setVisible(false);
-		
+
 		} else if (buttonPressed.equals(btnDeletePart)) {
-			try {		
-				Excel.deleteExcel(old_data);
-				
-				Excel.readExcel();
+			try {
 
-				comboBox_manufacturer.removeAllItems();
-				Excel.refreshSearchTable();
+				int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this part?",
+						"Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (response == JOptionPane.NO_OPTION) {
+					System.out.println("No button clicked");
+				} else if (response == JOptionPane.YES_OPTION) {
+					System.out.println("Yes button clicked");
+					Excel.deleteExcel(old_data);
 
-				Inventory.searchpartframe.setVisible(true);
-				Inventory.editpartframe.setVisible(false);
+					Excel.readExcel();
+
+					comboBox_manufacturer.removeAllItems();
+					Excel.refreshSearchTable();
+
+					Inventory.searchpartframe.setVisible(true);
+					Inventory.editpartframe.setVisible(false);
+				} else if (response == JOptionPane.CLOSED_OPTION) {
+					System.out.println("JOptionPane closed");
+				}
+
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
