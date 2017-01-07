@@ -198,156 +198,6 @@ public class EditPartFrame extends JFrame implements ActionListener {
 
 	}
 
-	public void readExcel() throws IOException {
-
-		Iterator<Row> rowIterator = spreadsheet.iterator();
-		while (rowIterator.hasNext()) {
-			row = (XSSFRow) rowIterator.next();
-			Iterator<Cell> cellIterator = row.cellIterator();
-			while (cellIterator.hasNext()) {
-				cell = cellIterator.next();
-				switch (cell.getCellType()) {
-				case Cell.CELL_TYPE_NUMERIC:
-					System.out.print(cell.getNumericCellValue() + " \t\t ");
-					break;
-				case Cell.CELL_TYPE_STRING:
-					System.out.print(cell.getStringCellValue() + " \t\t ");
-					break;
-				}
-			}
-			System.out.println();
-		}
-		// fIP.close();
-
-	}
-
-	public void writeExcel() throws Exception {
-
-		File file = new File("database.xlsx");
-		FileInputStream fIP = new FileInputStream("database.xlsx");
-
-		// Get the workbook instance for XLSX file
-
-		XSSFWorkbook workbook = new XSSFWorkbook(fIP);
-
-		if (file.isFile() && file.exists()) {
-			System.out.println("openworkbook.xlsx file open successfully.");
-		} else {
-			System.out.println("Error to open openworkbook.xlsx file.");
-		}
-
-		// Open the existing sheet
-
-		spreadsheet = workbook.getSheet("Employee Info");
-
-		row = spreadsheet.createRow(selected_row);
-
-		// Get part data from textfields
-
-		ArrayList<String> row_data = new ArrayList<String>();
-
-		row_data.add(EditPartFrame.textfield_partname.getText());
-		row_data.add((String) EditPartFrame.comboBox_manufacturer.getSelectedItem());
-		row_data.add(EditPartFrame.textField_idnumber.getText());
-		row_data.add((String) EditPartFrame.comboBox_room.getSelectedItem());
-		row_data.add(EditPartFrame.textField_binroom.getText());
-		row_data.add(EditPartFrame.textField_quantity.getText());
-
-		for (int i = 0; i < 6; i++) {
-			cell = row.createCell(i);
-			cell.setCellValue(row_data.get(i));
-		}
-
-		// Write the workbook in file system
-		FileOutputStream out = new FileOutputStream("database.xlsx");
-		workbook.write(out);
-		out.close();
-
-	}
-
-	public void editExcel() throws Exception {
-
-		File file = new File("database.xlsx");
-		FileInputStream fIP = new FileInputStream("database.xlsx");
-
-		// Get the workbook instance for XLSX file
-
-		XSSFWorkbook workbook = new XSSFWorkbook(fIP);
-
-		if (file.isFile() && file.exists()) {
-			System.out.println("openworkbook.xlsx file open successfully.");
-		} else {
-			System.out.println("Error to open openworkbook.xlsx file.");
-		}
-
-		// Open the existing sheet
-
-		spreadsheet = workbook.getSheet("Employee Info");
-
-		row = spreadsheet.getRow(selected_row);
-
-		// Get part data from textfields
-
-		ArrayList<String> row_data = new ArrayList<String>();
-
-		row_data.add(EditPartFrame.textfield_partname.getText());
-		row_data.add((String) EditPartFrame.comboBox_manufacturer.getSelectedItem());
-		row_data.add(EditPartFrame.textField_idnumber.getText());
-		row_data.add((String) EditPartFrame.comboBox_room.getSelectedItem());
-		row_data.add(EditPartFrame.textField_binroom.getText());
-		row_data.add(EditPartFrame.textField_quantity.getText());
-
-		for (int i = 0; i < 6; i++) {
-
-			cell = row.getCell(i);
-			cell.setCellValue(row_data.get(i));
-		}
-
-		// Write the workbook in file system
-		FileOutputStream out = new FileOutputStream("database.xlsx");
-		workbook.write(out);
-		out.close();
-
-	}
-
-	public void deleteExcel() throws Exception {
-
-		File file = new File("database.xlsx");
-		FileInputStream fIP = new FileInputStream("database.xlsx");
-
-		// Get the workbook instance for XLSX file
-
-		XSSFWorkbook workbook = new XSSFWorkbook(fIP);
-
-		if (file.isFile() && file.exists()) {
-			System.out.println("openworkbook.xlsx file open successfully.");
-		} else {
-			System.out.println("Error to open openworkbook.xlsx file.");
-		}
-
-		// Open the existing sheet
-
-		spreadsheet = workbook.getSheet("Employee Info");
-
-		row = spreadsheet.getRow(selected_row);
-
-		if (row != null) {
-			spreadsheet.removeRow(row);
-		}
-
-		int lastRowNum = spreadsheet.getLastRowNum();
-
-		if (selected_row >= 0 && selected_row < lastRowNum) {
-			spreadsheet.shiftRows(selected_row, lastRowNum, -1);
-		}
-
-		// Write the workbook in file system
-		FileOutputStream out = new FileOutputStream("database.xlsx");
-		workbook.write(out);
-		out.close();
-
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -357,28 +207,52 @@ public class EditPartFrame extends JFrame implements ActionListener {
 
 		if (buttonPressed.equals(btnSubmit)) {
 			try {
-				editExcel();
-				readExcel();
+				String partname = textfield_partname.getText();
+				String manufacturer = (String) comboBox_manufacturer.getSelectedItem();
+				String identification = textField_idnumber.getText();
+				String room = (String) comboBox_room.getSelectedItem();
+				String bin = textField_binroom.getText();
+				Integer quantity = Integer.parseInt(textField_quantity.getText());
+								
+				Excel.editExcel(partname,manufacturer,identification,room,bin,quantity);
+				Excel.readExcel();
+				
 				comboBox_manufacturer.removeAllItems();
-				Inventory.searchpartframe.ctm.refresh();
+				
+				Excel.refreshSearchTable();
+				
 				Inventory.searchpartframe.setVisible(true);
 				Inventory.editpartframe.setVisible(false);
+			
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		} else if (buttonPressed.equals(btnBack)) {
+			
 			System.out.println("Back");
+			
 			comboBox_manufacturer.removeAllItems();
+			
 			Inventory.searchpartframe.setVisible(true);
 			Inventory.editpartframe.setVisible(false);
+		
 		} else if (buttonPressed.equals(btnDeletePart)) {
 			try {
-				deleteExcel();
-				readExcel();
+				
+				String partname = textfield_partname.getText();
+				String manufacturer = (String) comboBox_manufacturer.getSelectedItem();
+				String identification = textField_idnumber.getText();
+				String room = (String) comboBox_room.getSelectedItem();
+				String bin = textField_binroom.getText();
+				Integer quantity = Integer.parseInt(textField_quantity.getText());
+				
+				
+				Excel.deleteExcel(partname,manufacturer,identification,room,bin,quantity);
+				Excel.readExcel();
 
 				comboBox_manufacturer.removeAllItems();
-				Inventory.searchpartframe.ctm.refresh();
+				Excel.refreshSearchTable();
 
 				Inventory.searchpartframe.setVisible(true);
 				Inventory.editpartframe.setVisible(false);

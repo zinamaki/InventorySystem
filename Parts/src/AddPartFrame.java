@@ -40,11 +40,7 @@ public class AddPartFrame extends JFrame implements ActionListener {
 	private JButton btnSubmit;
 	private JButton btnBack;
 
-	FileInputStream fIP;
-	XSSFSheet spreadsheet;
-	Cell cell;
-	// Create row object
-	XSSFRow row;
+	
 
 	Color background = new Color(54, 54, 54);
 	Color text = new Color(232, 23, 93);
@@ -188,75 +184,6 @@ public class AddPartFrame extends JFrame implements ActionListener {
 
 	}
 
-	public void readExcel() throws IOException {
-
-		Iterator<Row> rowIterator = spreadsheet.iterator();
-		while (rowIterator.hasNext()) {
-			row = (XSSFRow) rowIterator.next();
-			Iterator<Cell> cellIterator = row.cellIterator();
-			while (cellIterator.hasNext()) {
-				cell = cellIterator.next();
-				switch (cell.getCellType()) {
-				case Cell.CELL_TYPE_NUMERIC:
-					System.out.print(cell.getNumericCellValue() + " \t\t ");
-					break;
-				case Cell.CELL_TYPE_STRING:
-					System.out.print(cell.getStringCellValue() + " \t\t ");
-					break;
-				}
-			}
-			System.out.println();
-		}
-		// fIP.close();
-
-	}
-
-
-
-	public void writeExcel() throws Exception {
-
-		File file = new File("database.xlsx");
-		FileInputStream fIP = new FileInputStream("database.xlsx");
-
-		// Get the workbook instance for XLSX file
-
-		XSSFWorkbook workbook = new XSSFWorkbook(fIP);
-
-		if (file.isFile() && file.exists()) {
-			System.out.println("openworkbook.xlsx file open successfully.");
-		} else {
-			System.out.println("Error to open openworkbook.xlsx file.");
-		}
-
-		// Open the existing sheet
-
-		spreadsheet = workbook.getSheet("Employee Info");
-
-		row = spreadsheet.createRow(spreadsheet.getLastRowNum() + 1);
-
-		// Get part data from textfields
-
-		ArrayList<String> row_data = new ArrayList<String>();
-
-		row_data.add(AddPartFrame.textfield_partname.getText());
-		row_data.add((String) AddPartFrame.comboBox_manufacturer.getSelectedItem());
-		row_data.add(AddPartFrame.textField_idnumber.getText());
-		row_data.add((String) AddPartFrame.comboBox_room.getSelectedItem());
-		row_data.add(AddPartFrame.textField_binroom.getText() );
-		row_data.add(AddPartFrame.textField_quantity.getText());
-
-		for (int i = 0; i < 6; i++) {
-			cell = row.createCell(i);
-			cell.setCellValue(row_data.get(i));
-		}
-
-		// Write the workbook in file system
-		FileOutputStream out = new FileOutputStream("database.xlsx");
-		workbook.write(out);
-		out.close();
-
-	}
-
 	public void resetPage() {
 		textfield_partname.setText("");
 		comboBox_manufacturer.setSelectedIndex(0);
@@ -278,9 +205,19 @@ public class AddPartFrame extends JFrame implements ActionListener {
 			if(textfield_partname.getText().equals("") || textField_idnumber.getText().equals("")){
 				System.out.println("Hey you need to fill in the description and identification");
 			}else{
+				
+				String partname = textfield_partname.getText();
+				String manufacturer = (String) comboBox_manufacturer.getSelectedItem();
+				String identification = textField_idnumber.getText();
+				String room = (String) comboBox_room.getSelectedItem();
+				String bin = textField_binroom.getText();
+				Integer quantity = Integer.parseInt(textField_quantity.getText());
+				
+				
 				try {
-					writeExcel();
-					readExcel();
+					
+					Excel.writeExcel(partname,manufacturer,identification,room,bin,quantity);
+					Excel.readExcel();
 					resetPage();
 					
 				} catch (Exception e1) {

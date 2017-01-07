@@ -81,7 +81,7 @@ class CustomTableModel extends AbstractTableModel {
 		try {
 
 			if (this.partsTable) {
-				this.rowData = SearchPartFrame.getRowData();
+				this.rowData = Excel.getSearchRowData();
 			} else {
 				this.rowData = AddManufacturerFrame.getRowData();
 			}

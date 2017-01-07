@@ -67,22 +67,6 @@ public class AddManufacturerFrame extends JFrame implements ActionListener, Mous
 	private JTable table_2;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					SearchPartFrame frame = new SearchPartFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 * 
 	 * @throws IOException
@@ -235,6 +219,7 @@ public class AddManufacturerFrame extends JFrame implements ActionListener, Mous
 		// }
 
 		cell = row.createCell(0);
+		cell.setCellType(Cell.CELL_TYPE_STRING);
 		cell.setCellValue(AddManufacturerFrame.textfield_manufacturer.getText());
 
 		// Write the workbook in file system
@@ -273,7 +258,7 @@ public class AddManufacturerFrame extends JFrame implements ActionListener, Mous
 
 		refreshSpreadsheet();
 
-		Object[][] rowData = AddManufacturerFrame.getRowData();
+		Object[][] rowData = Inventory.addmanufacturerframe.getRowData();
 
 		for (int i = 0; i < rowData.length; i++) {
 			if (isAddPartFrame) {
@@ -286,7 +271,7 @@ public class AddManufacturerFrame extends JFrame implements ActionListener, Mous
 
 		}
 
-		readExcel();
+		Excel.readExcel();
 
 	}
 
@@ -333,29 +318,6 @@ public class AddManufacturerFrame extends JFrame implements ActionListener, Mous
 		return rowData;
 	}
 
-	public void readExcel() throws IOException {
-
-		Iterator<Row> rowIterator = spreadsheet.iterator();
-		while (rowIterator.hasNext()) {
-			row = (XSSFRow) rowIterator.next();
-			Iterator<Cell> cellIterator = row.cellIterator();
-			while (cellIterator.hasNext()) {
-				cell = cellIterator.next();
-				switch (cell.getCellType()) {
-				case Cell.CELL_TYPE_NUMERIC:
-					System.out.print(cell.getNumericCellValue() + " ");
-					break;
-				case Cell.CELL_TYPE_STRING:
-					System.out.print(cell.getStringCellValue() + " ");
-					break;
-				}
-			}
-			System.out.println();
-		}
-		// fIP.close();
-
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -368,7 +330,7 @@ public class AddManufacturerFrame extends JFrame implements ActionListener, Mous
 
 			try {
 				writeExcel();
-				readExcel();
+				Excel.readExcel();
 			} catch (Exception e2) {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();

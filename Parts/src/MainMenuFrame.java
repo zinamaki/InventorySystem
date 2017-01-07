@@ -126,7 +126,7 @@ public class MainMenuFrame extends JFrame implements ActionListener {
 		if (buttonPressed.equals(btnSearchPart)) {
 			System.out.println("Search for a Part");
 
-			SearchPartFrame.ctm.refresh();
+			Excel.refreshSearchTable();
 
 			Inventory.mainmenuframe.setVisible(false);
 			Inventory.searchpartframe.setVisible(true);
