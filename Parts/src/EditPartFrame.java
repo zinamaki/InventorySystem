@@ -37,8 +37,6 @@ public class EditPartFrame extends JFrame implements ActionListener {
 	public static JComboBox comboBox_room;
 	public static JComboBox comboBox_manufacturer;
 
-	public static int selected_row;
-
 	private JButton btnSubmit;
 	private JButton btnBack;
 
@@ -221,17 +219,9 @@ public class EditPartFrame extends JFrame implements ActionListener {
 			Inventory.editpartframe.setVisible(false);
 		
 		} else if (buttonPressed.equals(btnDeletePart)) {
-			try {
+			try {		
+				Excel.deleteExcel(old_data);
 				
-				String partname = textfield_partname.getText();
-				String manufacturer = (String) comboBox_manufacturer.getSelectedItem();
-				String identification = textField_idnumber.getText();
-				String room = (String) comboBox_room.getSelectedItem();
-				String bin = textField_binroom.getText();
-				Integer quantity = Integer.parseInt(textField_quantity.getText());
-				
-				
-				Excel.deleteExcel(partname,manufacturer,identification,room,bin,quantity);
 				Excel.readExcel();
 
 				comboBox_manufacturer.removeAllItems();

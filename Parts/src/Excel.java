@@ -108,23 +108,20 @@ public class Excel {
 
 	public static void editExcel(Part old_data, Part new_data) throws Exception {
 
-		
-
 		// find the index of the row to be deleted and place in "selected_row"
 
 		int indexOfRow = findMatchingRow(old_data);
-		
+
 		System.out.println(indexOfRow);
-		
 
-		row = spreadsheet.getRow(indexOfRow+1);
-
-		
-		
-		if (row != null){
+		if (indexOfRow != -1) {
 			
 			openSheet();
 			
+			row = spreadsheet.getRow(indexOfRow);
+
+			
+
 			// Get part data from textfields
 
 			ArrayList<String> row_data = new ArrayList<String>();
@@ -135,14 +132,15 @@ public class Excel {
 			row_data.add(new_data.room);
 			row_data.add(new_data.bin);
 
-			// row_data.add(EditPartFrame.textField_quantity.getText());
-
+			
 			for (int i = 0; i < 5; i++) {
 
 				cell = row.getCell(i);
 
 				cell.setCellType(Cell.CELL_TYPE_STRING);
 				cell.setCellValue(row_data.get(i));
+				
+				System.out.println(row_data.get(i));
 
 			}
 
@@ -152,11 +150,7 @@ public class Excel {
 			cell.setCellValue(new_data.quantity);
 
 			closeSheet();
-			
 		}
-		
-		
-	
 
 	}
 
@@ -173,7 +167,7 @@ public class Excel {
 
 			for (int cellCounter = 0; cellCounter < 6; cellCounter++) {
 
-				if (row.getCell(0).getStringCellValue().equals(old_data.partname) 
+				if (row.getCell(0).getStringCellValue().equals(old_data.partname)
 						&& row.getCell(1).getStringCellValue().equals(old_data.manufacturer)
 						&& row.getCell(2).getStringCellValue().equals(old_data.identification)
 						&& row.getCell(3).getStringCellValue().equals(old_data.room)
@@ -181,9 +175,6 @@ public class Excel {
 						&& row.getCell(5).getNumericCellValue() == old_data.quantity) {
 					// we have found the correct row, so return its index
 
-					System.out.println("WE HAVE FOUND THE ROW");
-					
-					
 					return row.getRowNum();
 				}
 
@@ -191,33 +182,39 @@ public class Excel {
 
 		}
 		closeSheet();
-		// fIP.close();
 
 		return indexOfRow;
 	}
 
-	public static void deleteExcel(String partname, String manufacturer, String identification, String room, String bin,
-			Integer quantity) throws Exception {
+	public static void deleteExcel(Part old_data) throws Exception {
 
-		openSheet();
+		
 
-		int selected_row = 0;
+		int selected_row = findMatchingRow(old_data);
 
-		// find the index of the row to be deleted and place in "selected_row"
+		if (selected_row != -1){
+			
+			openSheet();
+			
+			// find the index of the row to be deleted and place in "selected_row"
 
-		row = spreadsheet.getRow(selected_row);
+			row = spreadsheet.getRow(selected_row);
 
-		if (row != null) {
-			spreadsheet.removeRow(row);
+			if (row != null) {
+				spreadsheet.removeRow(row);
+			}
+
+			int lastRowNum = spreadsheet.getLastRowNum();
+
+			if (selected_row >= 0 && selected_row < lastRowNum) {
+				spreadsheet.shiftRows(selected_row, lastRowNum, -1);
+			}
+
+			closeSheet();
+			
 		}
-
-		int lastRowNum = spreadsheet.getLastRowNum();
-
-		if (selected_row >= 0 && selected_row < lastRowNum) {
-			spreadsheet.shiftRows(selected_row, lastRowNum, -1);
-		}
-
-		closeSheet();
+		
+	
 
 	}
 
@@ -233,14 +230,14 @@ public class Excel {
 				cell = cellIterator.next();
 				switch (cell.getCellType()) {
 				case Cell.CELL_TYPE_NUMERIC:
-				//	System.out.print(cell.getNumericCellValue() + " \t\t ");
+					// System.out.print(cell.getNumericCellValue() + " \t\t ");
 					break;
 				case Cell.CELL_TYPE_STRING:
-				//	System.out.print(cell.getStringCellValue() + " \t\t ");
+					// System.out.print(cell.getStringCellValue() + " \t\t ");
 					break;
 				}
 			}
-		//	System.out.println();
+			// System.out.println();
 		}
 		closeSheet();
 		// fIP.close();
@@ -262,7 +259,7 @@ public class Excel {
 		// ctm.setColumnEditable(3, true);
 
 		JTable fresh_table = new JTable(ctm_search);
-
+	
 		closeSheet();
 		return fresh_table;
 

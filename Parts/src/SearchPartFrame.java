@@ -216,19 +216,11 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 					Inventory.editpartframe.textfield_partname.setText(partname);
 					Inventory.editpartframe.comboBox_manufacturer.setSelectedItem(selected_manufacturer);
 					Inventory.editpartframe.comboBox_room.setSelectedItem(selected_room);
-					Inventory.editpartframe.textField_idnumber.setText(identification);
-									
-					//Inventory.editpartframe.textField_quantity.setDocument(new IntegerDocument());
+					Inventory.editpartframe.textField_idnumber.setText(identification);		
+					
 					Inventory.editpartframe.textField_quantity.setText(String.valueOf(quantity));
-					//Inventory.editpartframe.textField_quantity.setDocument(new IntegerDocument());
-
-					
-					
-					
-					
+									
 					Inventory.editpartframe.textField_binroom.setText(selected_bin.toString());
-
-					Inventory.editpartframe.selected_row = t.getSelectedRow() + 1;
 
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
