@@ -91,11 +91,13 @@ public class SearchPartFrame extends JFrame implements ActionListener, MouseList
 		comboBox_cat = new JComboBox();
 		comboBox_cat.setBounds(129, 137, 126, 20);
 
-		comboBox_cat.addItem("Part Name");
+		comboBox_cat.addItem("Description");
 		comboBox_cat.addItem("Manufacturer");
-		comboBox_cat.addItem("ID Number");
+		comboBox_cat.addItem("Identification");
 		comboBox_cat.addItem("Room");
 		comboBox_cat.addItem("Bin");
+		comboBox_cat.addItem("Quantity");
+		
 		contentPane.setBackground(new Color(236, 240, 241));
 		contentPane.setForeground(new Color(52, 152, 219));
 		contentPane.setLayout(null);

@@ -25,7 +25,7 @@ class CustomTableModel extends AbstractTableModel {
 
 		sortedColumn = -1; // means table not sorted initially
 	}
-
+/*
 	public void sort(int idx) {
 		if (sortedColumn == idx)
 			sortOrder = !sortOrder; // reverse the sort (clicked again)
@@ -36,7 +36,7 @@ class CustomTableModel extends AbstractTableModel {
 
 		Arrays.sort(rowData, new CustomComparator(idx, sortOrder));
 	}
-
+*/
 	@Override
 	public int getColumnCount() {
 		return columnNames.length;

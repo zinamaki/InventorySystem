@@ -173,6 +173,7 @@ public class EditPartFrame extends JFrame implements ActionListener {
 		textField_equipment = new JTextField();
 		textField_equipment.setColumns(10);
 		textField_equipment.setBounds(352, 422, 249, 40);
+		textField_equipment.setEnabled(false);
 		contentPane.add(textField_equipment);
 
 	}
