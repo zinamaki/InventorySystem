@@ -4,7 +4,7 @@ This repository is for a Java Swing Application that allows users to organize a 
 
 Key features:
 
-  Add a part
-  See the list of parts
-  Search for parts
-  Organize parts by name, manufacturer, part number, bin location or quantity
+  - Add a part
+  - See the list of parts
+  - Search for parts
+  - Organize parts by name, manufacturer, part number, bin location or quantity
